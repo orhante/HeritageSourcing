@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #f5f2ec;
+  --fg: #111111;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Segoe UI", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+.luxury-scroll {
+  scroll-behavior: smooth;
+}
+
+.container-page {
+  @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
+}

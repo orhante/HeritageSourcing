@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Double-Face Cashmere Coats &mdash; Grisch Sourcing</title>
+    <meta
+      name="description"
+      content="Double-Face Cashmere Coats from Grisch Sourcing. A quietly luxurious coat crafted from pure cashmere."
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="shell site-header__inner">
+        <a href="index.html" class="brand">
+          <span class="brand__overline">Grisch</span>
+          <span class="brand__main">Sourcing</span>
+        </a>
+        <nav class="site-nav" aria-label="Primary">
+          <ul class="site-nav__list">
+            <li class="site-nav__item">
+              <a href="index.html" class="site-nav__link">Home</a>
+            </li>
+            <li class="site-nav__item">
+              <a href="collection.html" class="site-nav__link">Collection</a>
+            </li>
+            <li class="site-nav__item">
+              <a href="index.html#about" class="site-nav__link">About</a>
+            </li>
+            <li class="site-nav__item">
+              <a href="index.html#contact" class="site-nav__link">Contact</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="section section--padded">
+        <div class="shell">
+          <div class="product-image-grid" id="product-image-grid"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell site-footer__inner">
+        <nav class="site-footer__nav" aria-label="Footer">
+          <a href="index.html" class="site-footer__link">Home</a>
+          <a href="collection.html" class="site-footer__link">Collection</a>
+          <a href="index.html#about" class="site-footer__link">About</a>
+          <a href="index.html#contact" class="site-footer__link">Contact</a>
+        </nav>
+        <p class="site-footer__copy">
+          &copy; <span id="year"></span> Grisch Sourcing. All rights reserved.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      // Map product keys to their 8 image paths (use placeholder paths)
+      const productImages = {
+        product1: [
+          'https://i.pinimg.com/control1/736x/f6/7b/a7/f67ba7d47f34cc8cf7ce8e7f2937d302.jpg',
+          'https://i.pinimg.com/1200x/6d/cf/04/6dcf043edd63b3da6e61fbce8b2f1e46.jpg',
+          'https://i.pinimg.com/1200x/da/85/24/da8524ecc9ed7d2837b910117ecfa96c.jpg',
+          'https://i.pinimg.com/control1/1200x/7a/22/87/7a2287f30bbea74c06ec4ecb99a886e7.jpg',
+          'https://i.pinimg.com/control1/736x/10/a2/b0/10a2b075986b865bce96672ee229a2f5.jpg',
+          'https://i.pinimg.com/1200x/12/e3/0d/12e30dd8b9bcbcd490c3029d20d50400.jpg',
+          'https://i.pinimg.com/736x/c9/33/6d/c9336d5708dd38f00ce90a56688ff3b0.jpg',
+          'https://i.pinimg.com/control1/1200x/7b/76/7c/7b767c4c6702aa867f5149e6860ab478.jpg',
+        ],
+        product2: [
+          'https://i.pinimg.com/1200x/3b/61/8a/3b618aab531a00444daa1e8527437099.jpg',
+          'https://i.pinimg.com/1200x/01/50/8a/01508a13a1b39f9f88fdb212c7bd1bf9.jpg',
+          'https://i.pinimg.com/736x/7f/63/33/7f63336f3744ed531ed02db9a7afde46.jpg',
+          'https://i.pinimg.com/736x/d9/bc/c0/d9bcc0c6894edbd59d1fd4aec584b86a.jpg',
+          'https://i.pinimg.com/1200x/bd/e1/d9/bde1d9e9bb83b3a2f4e6a884826fd751.jpg',
+          'https://i.pinimg.com/1200x/52/52/cc/5252ccc016d44813997e4595d9f26b24.jpg',
+          'https://i.pinimg.com/736x/9f/ac/4b/9fac4b815df4e5c33f0968d0e90138b5.jpg',
+          'https://i.pinimg.com/1200x/99/ce/7a/99ce7a814caf980bc5df1adeabf5e05f.jpg',
+        ],
+        product3: [
+          'https://i.pinimg.com/1200x/32/68/60/3268605dab9bfc79d73dbfd4f32b505a.jpg',
+          'https://i.pinimg.com/1200x/ed/43/e8/ed43e89046b2a52d93f96cda35bef053.jpg',
+          'https://i.pinimg.com/control1/1200x/22/97/60/229760c8e63122358f86f4042e7acc7e.jpg',
+          'https://i.pinimg.com/1200x/a9/38/26/a9382655d52cbe46c4a2472d736f4158.jpg',
+          'https://i.pinimg.com/1200x/27/6c/7e/276c7e7e8af5d490ace391fb3d4c2e6d.jpg',
+          'https://i.pinimg.com/1200x/88/5d/b1/885db138eb944bc6fc1a43ef4780b373.jpg',
+          'https://i.pinimg.com/1200x/85/e9/9d/85e99d0af385dcc5bce57c059ded4b73.jpg',
+          'https://i.pinimg.com/736x/ca/7c/32/ca7c325fb8ef23b40536b5a25df779f3.jpg',
+        ],
+        product4: [
+          'https://i.pinimg.com/1200x/52/c0/1a/52c01a87c7e2d5ea31498d345fd423ae.jpg',
+          'https://i.pinimg.com/1200x/ee/c2/67/eec26797ebd83d18dc7a1c95ef9fee4b.jpg',
+          'https://i.pinimg.com/1200x/73/2d/af/732dafe53832e528bd4240b86d3f02d1.jpg',
+          'https://i.pinimg.com/1200x/a0/3f/00/a03f008c76fc6c8937c18bcfc7d919be.jpg',
+          'https://i.pinimg.com/736x/8c/21/80/8c2180accc27af399c1a4fbf1ab350a2.jpg',
+          'https://i.pinimg.com/1200x/64/6c/c9/646cc92d2887489720570ab47d8eaedc.jpg',
+          'https://i.pinimg.com/1200x/fd/e8/13/fde81325a095d352f893fcd608b541e9.jpg',
+          'https://i.pinimg.com/1200x/83/c9/65/83c965cd051486176508e0036ec96ea6.jpg',
+        ],
+        product5: [
+          'https://i.pinimg.com/1200x/86/93/0a/86930af514e2ed0d76f523bac214cb52.jpg',
+          'https://i.pinimg.com/1200x/31/de/21/31de21122246221a662555a1e0dd6e81.jpg',
+          'https://i.pinimg.com/1200x/df/cd/06/dfcd06b9b000a56e344c0cdc2506a72b.jpg',
+          'https://i.pinimg.com/1200x/a6/44/20/a644200523011e790f047ee0c183d289.jpg',
+          'https://i.pinimg.com/control1/1200x/7c/c7/ae/7cc7aedcd893fba97a861eac8d3e669e.jpg',
+          'https://i.pinimg.com/1200x/ba/ea/84/baea849520e7c17fe4da47db38d91197.jpg',
+          'https://i.pinimg.com/1200x/b0/35/61/b03561f6d184b47a61419ab661b66e42.jpg',
+          'https://i.pinimg.com/1200x/52/38/61/523861732a6e2d538c81fbd247649d5a.jpg',
+        ],
+        product6: [
+          'https://i.pinimg.com/1200x/5e/41/b6/5e41b6fdb10bb93d81e6dbfd1788570b.jpg',
+          'https://i.pinimg.com/control1/1200x/9d/3a/bb/9d3abbe14f1c00f8395dbf09a0ad37e8.jpg',
+          'https://i.pinimg.com/1200x/8f/0c/ed/8f0ced10324fdf36fc2b1ccaf665ce38.jpg',
+          'https://i.pinimg.com/control1/1200x/00/c2/49/00c249eaf302cd5617bfcf9c2efc8ddc.jpg',
+          'https://i.pinimg.com/736x/98/22/03/98220312f1739d3978cd92cdadaf7c2d.jpg',
+          'https://i.pinimg.com/control1/736x/a4/78/54/a47854f0668abe6cf661472b18760aaf.jpg',
+          'https://i.pinimg.com/736x/4a/08/8b/4a088b72b6cb09c09fd07ca45c2adcc7.jpg',
+          'https://i.pinimg.com/1200x/83/b3/40/83b340df204bb1760d2e03aa061c8756.jpg',
+        ],
+        product7: [
+          'https://i.pinimg.com/736x/77/5d/c5/775dc5eaf6f23cec68ce95e5ea785310.jpg',
+          'https://i.pinimg.com/1200x/9e/30/83/9e3083825e3d1d6700228f5680313cb6.jpg',
+          'https://i.pinimg.com/1200x/75/de/12/75de125aae42ca530198472b2175817a.jpg',
+          'https://i.pinimg.com/1200x/12/ce/28/12ce28bae8e89d96e88d9fa8c65d85e7.jpg',
+          'https://i.pinimg.com/control1/1200x/80/9c/02/809c027039dcf53fdca1c69bc600db42.jpg',
+          'https://i.pinimg.com/736x/10/52/7d/10527da5fc029610cae9d7baeb3f6bb0.jpg',
+          'https://i.pinimg.com/736x/5c/4b/46/5c4b468b7560712c12cbe3f37de247e5.jpg',
+          'https://i.pinimg.com/1200x/ec/12/df/ec12df38c8e64b1f91463b9b419c25e6.jpg',
+        ],
+        product8: [
+          'https://i.pinimg.com/1200x/9e/65/35/9e6535a8a63e2ee9847fe5906b3096e0.jpg',
+          'https://i.pinimg.com/736x/85/c2/9d/85c29d6483ab64d131ec27367c3108e9.jpg',
+          'https://i.pinimg.com/1200x/11/14/c7/1114c79ed44f9599e26f0d530bad9ff8.jpg',
+          'https://i.pinimg.com/control1/1200x/a5/7b/5c/a57b5c3af8531b36e6be94d7afa5f581.jpg',
+          'https://i.pinimg.com/1200x/6d/aa/cb/6daacbf1a4960c76377ee498933704ff.jpg',
+          'https://i.pinimg.com/736x/bb/bc/ec/bbbcec8e398d4a36f9017fef8569c692.jpg',
+          'https://i.pinimg.com/1200x/e9/f2/87/e9f2875c74b6671cabda6907d8a0823a.jpg',
+          'https://i.pinimg.com/1200x/3f/27/ba/3f27baee0bd3b791f4617b2c0fb35455.jpg',
+        ],
+      };
+
+      // Get ?item= from URL
+      function getQueryParam(name) {
+        const url = new URL(window.location.href);
+        return url.searchParams.get(name);
+      }
+
+      const item = getQueryParam('item');
+      const images = productImages[item] || productImages['product1'];
+      const grid = document.getElementById('product-image-grid');
+      grid.innerHTML = '';
+      images.forEach((src, i) => {
+        const div = document.createElement('div');
+        div.className = 'image-item';
+        div.innerHTML = `
+          <img src="${src}" alt="Product Image ${i+1}" class="product-image" />
+          <div class="image-overlay">
+            <button class="order-btn" type="button">Order Now</button>
+          </div>
+        `;
+        grid.appendChild(div);
+      });
+
+      // WhatsApp link from index.html
+      const whatsappUrl = "https://wa.me/38763368323?text=I%20would%20like%20to%20learn%20more%20about%20your%20collection.";
+      // Attach click event to all order buttons
+      grid.addEventListener('click', function(e) {
+        if (e.target && e.target.classList.contains('order-btn')) {
+          window.open(whatsappUrl, '_blank', 'noopener');
+        }
+      });
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>
+
