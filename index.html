@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Grisch Sourcing &mdash; Italian Luxury Cashmere</title>
+    <title>Heritage Sourcing &mdash; Italian Luxury Cashmere</title>
     <meta
       name="description"
-      content="Grisch Sourcing &mdash; a minimalist catalog of Italian-inspired luxury knitwear and tailoring."
+      content="Heritage Sourcing &mdash; a minimalist catalog of Italian-inspired luxury knitwear and tailoring."
     />
     <link rel="stylesheet" href="style.css" />
     <style>
@@ -50,12 +50,18 @@
           font-size: 0.95rem;
           padding: 0.5rem 0.7rem;
         }
-        .brand__main {
-          font-size: 1.05rem;
-        }
-        .brand__overline {
-          font-size: 0.7rem;
-        }
+        /* UPDATED CODE */
+.brand__main {
+  font-size: 22px !important; /* Forces it to match collection page */
+  letter-spacing: 6px !important;
+  text-transform: uppercase;
+}
+
+  .brand__overline {
+  font-size: 11px !important;
+  letter-spacing: 3px !important;
+  text-transform: uppercase;
+}
         .hero__title {
           font-size: 1.5rem;
         }
@@ -94,24 +100,26 @@
     <header class="site-header">
       <div class="shell site-header__inner">
         <a href="index.html" class="brand">
-          <span class="brand__overline">Grisch</span>
+          <span class="brand__overline">Heritage</span>
           <span class="brand__main">Sourcing</span>
         </a>
         <nav class="site-nav" aria-label="Primary">
           <ul class="site-nav__list">
             <li class="site-nav__item">
               <a href="index.html" class="site-nav__link site-nav__link--active"
-                >Home</a
-              >
+                >Home</a>
             </li>
             <li class="site-nav__item">
               <a href="collection.html" class="site-nav__link">Collection</a>
             </li>
             <li class="site-nav__item">
-              <a href="#about" class="site-nav__link js-scroll">About</a>
+              <a href="lookbook.html" class="site-nav__link">Lookbook</a>
             </li>
             <li class="site-nav__item">
-              <a href="#contact" class="site-nav__link js-scroll">Contact</a>
+              <a href="#about" class="site-nav__link">About</a>
+            </li>
+            <li class="site-nav__item">
+              <a href="#contact" class="site-nav__link">Contact</a>
             </li>
           </ul>
         </nav>
@@ -119,60 +127,175 @@
     </header>
 
     <main>
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="hero__media">
-          <img
-            src="https://i.pinimg.com/1200x/6c/f9/59/6cf95910458ef7e6a67b428e343c4efe.jpg"
-            alt="Double-faced cashmere coats in soft beige tones"
-          />
-          <img
-            src="https://i.pinimg.com/1200x/0e/4a/03/0e4a03b7580931a51d0778bc7f0a6c59.jpg"
-            alt="Stack of lightweight knitwear in neutral tones"
-          />
-          <img
-            src="https://i.pinimg.com/736x/9c/eb/2f/9ceb2f6fe557edf56738647cb0df401a.jpg"
-            alt="Tailored linen trousers and shorts on a neutral background"
-          />
-        </div>
-        <div class="hero__overlay"></div>
-        <div class="shell hero__inner">
-          <p class="eyebrow">Italian Luxury</p>
-          <h1 id="hero-title" class="hero__title">
-            Quiet elegance in
-            <span class="hero__title-break">cashmere and linen</span>
-          </h1>
-          <p class="hero__subtitle">
-            A considered edit of timeless garments, crafted in soft neutrals
-            with meticulous attention to detail.
-          </p>
-          <div class="hero__actions">
-            <a href="collection.html" class="button button--primary"
-              >View Collection</a
-            >
-            <a href="collection.html#in-stock" class="button button--ghost js-scroll"
-              >In Stock</a
-            >
+      <section class="main-header-section">
+        <div class="main-header-bg">
+          <div class="main-header-bg-images">
+            <img src="https://i.pinimg.com/1200x/19/d7/e0/19d7e0c5b29705352eb2a19b26891dfb.jpg" alt="Placeholder 1" />
+            <img src="https://i.pinimg.com/736x/ba/25/ca/ba25ca7e3104d99529747e41683d2f63.jpg" alt="Placeholder 2" />
+            <img src="https://i.pinimg.com/736x/06/38/f2/0638f2f129e76cb5d39d3363491f6320.jpg" alt="Placeholder 3" />
           </div>
+          <div class="main-header-overlay"></div>
         </div>
+        <div class="main-header-content">
+          <a href="collection.html#in-stock" class="main-header-btn" style="background:rgba(206, 178, 148, 0.9); color:#fff; border:none;">Explore Available</a>
+           <div style="text-align:center; pointer-events:none;">
+    <p style="font-family:'Cinzel',serif; font-size:1.1rem; color:#fff; letter-spacing:0.35em; text-transform:uppercase; margin:0; text-shadow:0 2px 12px rgba(0,0,0,0.4);">Luxury. Sourced.</p>
+    <p style="font-family:'Montserrat',sans-serif; font-size:0.7rem; color:rgba(255,255,255,0.7); letter-spacing:0.2em; text-transform:uppercase; margin:0.5rem 0 0;">Authentic pieces</p>
+  </div>
+          <a href="collection.html#collection" class="main-header-btn" style="background:transparent; color:#fff; border:1.5px solid rgba(255,255,255,0.7);">Explore Collection</a>
+        </div>
+        
+        
       </section>
+      <style>
+       .main-header-section {
+  position: relative;
+  width: 100vw;
+  min-width: 100%;
+  height: 800px;
+  overflow: hidden;
+  margin-bottom: 2.5rem;
+  display: block;
+}
+
+.main-header-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.main-header-bg-images {
+  display: flex;      /* keep images side by side */
+  width: 100%;
+  height: 100%;
+}
+
+.main-header-bg-images img {
+  flex: 0 0 33.3333%; /* force equal width for desktop */
+  width: 33.3333%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.95;
+  transition: opacity 0.7s;
+  border: none;
+  box-shadow: none;
+  filter: grayscale(0.10) blur(0.5px);
+}
+
+.main-header-bg-images img:hover {
+  opacity: 1;
+  filter: none;
+}
+
+.main-header-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(20,20,20,0.45);
+  z-index: 2;
+}
+
+.main-header-content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  width: 100vw;
+  max-width: 100vw;
+  padding: 0 5vw;
+}
+
+.main-header-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 150px;
+  padding: 0.5em 1.0em;
+  font-size: 1.0rem;
+  font-weight: 00;
+  border-radius: 2.5em;
+  border: none;
+  background: rgba(232, 216, 195, 0.788);
+  color: #181818;
+  text-decoration: none;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  letter-spacing: 0.08em;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s, transform 0.18s;
+  cursor: pointer;
+  outline: none;
+}
+
+.main-header-btn:hover, .main-header-btn:focus {
+  background: rgba(217, 196, 168, 0.95);
+  color: #111;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.main-header-btn--left,
+.main-header-btn--right {
+  align-self: center;
+}
+
+/* Mobile layout adjustments */
+@media (max-width: 900px) {
+  .main-header-bg-images img {
+    flex: 0 0 33.3333%;  /* keep equal widths on mobile too */
+    width: 33.3333%;
+    height: 100%;
+  }
+
+  .main-header-content {
+    padding: 0 2vw;
+  }
+}
+
+@media (max-width: 700px) {
+  .main-header-content {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .main-header-section {
+    height: 500px;  /* scale hero height for very small screens */
+  }
+}
+      </style>
+<!-- Social Proof Bar -->
+<div style="display:flex; justify-content:center; gap:3rem; padding:1.4rem 1rem; background:#FDFCFA; border-top:1px solid rgba(180,165,140,0.15); border-bottom:1px solid rgba(180,165,140,0.15); flex-wrap:wrap;">
+  <div style="text-align:center;">
+    <p style="font-family:'Cinzel',serif; font-size:1.1rem; color:#1A1A1A; margin:0; letter-spacing:0.08em;">15+</p>
+    <p style="font-size:0.6rem; color:#9A9088; letter-spacing:0.16em; text-transform:uppercase; margin:0.2rem 0 0;">Luxury Brands</p>
+  </div>
+  <div style="text-align:center;">
+    <p style="font-family:'Cinzel',serif; font-size:1.1rem; color:#1A1A1A; margin:0; letter-spacing:0.08em;">100+</p>
+    <p style="font-size:0.6rem; color:#9A9088; letter-spacing:0.16em; text-transform:uppercase; margin:0.2rem 0 0;">Satisfied Clients</p>
+  </div>
+  
+</div>
+
+<section id="about" class="section section--muted">
 
 
       <section id="about" class="section section--muted">
         <div class="shell split split--about">
           <div class="split__item">
-            <h2 class="section__title">About Grisch Sourcing</h2>
+            <h2 class="section__title">About Heritage Sourcing</h2>
           </div>
           <div class="split__item">
             <p>
-              Inspired by the quiet luxury of Italian seaside towns and
-              mountain retreats, Grisch Sourcing focuses on refined essentials
-              designed to live beyond seasons.
-            </p>
-            <p>
-              Every piece in the collection is defined by restrained lines,
-              neutral palettes, and tactile fabrics chosen for their softness
-              and longevity.
-            </p>
+  <p>Heritage Sourcing specializes in acquiring and reselling authentic luxury pieces from globally recognized houses such as Christian Louboutin, Ralph Lauren, Tom Ford and much more.</p>
+<p>Each item is carefully sourced through trusted channels, with a focus on authenticity, condition, and exclusivity. Rather than mass retail, we offer a more personal approach — connecting clients with sought-after pieces that are not always easily available locally.</p>
+<p>From statement footwear to refined essentials, every request is handled with discretion, precision, and attention to detail. Whether you're looking for something specific or open to what's available, we're here to help you acquire it.</p>
+<a href="collection.html" style="display:inline-block; margin-top:0.5rem; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:#B89167; border-bottom:1px solid rgba(184,145,103,0.3); padding-bottom:1px;">Browse the Collection →</a>
+          
           </div>
         </div>
       </section>
@@ -189,8 +312,8 @@
             </p>
             <p class="contact__detail">
               Email
-              <a href="orhanteletovic@gmail.com"
-                >orhanteletovic@gmail.com</a
+              <a href="mailto:orhanteletovic@gmail.com">orhanteletovic@gmail.com</a>
+                
               >
             </p>
             <p class="contact__detail">
@@ -212,8 +335,10 @@
     <nav class="site-footer__nav" aria-label="Footer">
       <a href="index.html" class="site-footer__link">Home</a>
       <a href="collection.html" class="site-footer__link">Collection</a>
+      <a href="lookbook.html" class="site-footer__link">Lookbook</a>
       <a href="#about" class="site-footer__link js-scroll">About</a>
       <a href="#contact" class="site-footer__link js-scroll">Contact</a>
+      
     </nav>
 
     <!-- Social icons start -->
@@ -224,16 +349,30 @@
       <a href="https://wa.me/38763368323" target="_blank" aria-label="WhatsApp">
         <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="social-icon"/>
       </a>
+     
     
     <!-- Social icons end -->
 
     <p class="site-footer__copy">
-      &copy; <span id="year"></span> Grisch Sourcing. All rights reserved.
+      &copy; <span id="year"></span> Heritage Sourcing. All rights reserved.
     </p>
   </div>
 </footer>
 
     <script src="script.js"></script>
+    <script>
+let count = 0;
+let target = 100;
+let speed = 20;
+
+let counter = setInterval(function() {
+  count++;
+  document.getElementById("customerCount").innerText = count;
+
+  if (count >= target) {
+    clearInterval(counter);
+  }
+}, speed);
+</script>
   </body>
 </html>
-

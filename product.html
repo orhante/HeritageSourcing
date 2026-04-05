@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+    <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Double-Face Cashmere Coats &mdash; Grisch Sourcing</title>
+    <title>Heritage Sourcing</title>
     <meta
       name="description"
-      content="Double-Face Cashmere Coats from Grisch Sourcing. A quietly luxurious coat crafted from pure cashmere."
+      content="Cashmere Coats from Heritage Sourcing. A quietly luxurious coat crafted from pure cashmere."
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <header class="site-header">
       <div class="shell site-header__inner">
         <a href="index.html" class="brand">
-          <span class="brand__overline">Grisch</span>
+          <span class="brand__overline">Heritage</span>
           <span class="brand__main">Sourcing</span>
         </a>
         <nav class="site-nav" aria-label="Primary">
@@ -24,6 +27,9 @@
             </li>
             <li class="site-nav__item">
               <a href="collection.html" class="site-nav__link">Collection</a>
+            </li>
+            <li class="site-nav__item">
+              <a href="lookbook.html" class="site-nav__link">Lookbook</a>
             </li>
             <li class="site-nav__item">
               <a href="index.html#about" class="site-nav__link">About</a>
@@ -37,11 +43,32 @@
     </header>
 
     <main>
-      <section class="section section--padded">
-        <div class="shell">
-          <div class="product-image-grid" id="product-image-grid"></div>
-        </div>
-      </section>
+      <div class="shell">
+
+  <div class="collection-info">
+    <h2>Available for Sourcing</h2>
+    <p>
+      These pieces represent brands and styles we can source for you.
+      If something catches your eye, click <strong>Reserve Piece</strong>
+      and we'll arrange availability, sizing and delivery.
+    </p>
+  </div>
+  <div class="how-it-works">
+      <h3>How Ordering Works</h3>
+      <ul class="how-it-works-list">
+        <li>Submit an inquiry for your desired piece.</li>
+        <li>Consult with our sourcing specialist.</li>
+        <li>We source and authenticate your item.</li>
+        <li>Receive your order, delivered discreetly.</li>
+      </ul>
+       <p style="font-size:0.72rem; color:#9A9088; letter-spacing:0.08em; margin-top:0.5rem;">
+      * Prices shown are approximate and may vary based on availability and sizing.
+    </p>
+    </div>
+
+  <div class="product-image-grid" id="product-image-grid"></div>
+
+</div>
     </main>
 
     <footer class="site-footer">
@@ -49,24 +76,123 @@
         <nav class="site-footer__nav" aria-label="Footer">
           <a href="index.html" class="site-footer__link">Home</a>
           <a href="collection.html" class="site-footer__link">Collection</a>
+          <a href="lookbook.html" class="site-footer__link">Lookbook</a>
           <a href="index.html#about" class="site-footer__link">About</a>
           <a href="index.html#contact" class="site-footer__link">Contact</a>
         </nav>
+        <section class="trust-row">
+  <div class="trust-item">Authentic Designer Brands</div>
+  <div class="trust-item">Fast Shipping</div>
+  <div class="trust-item">Trusted by <span id="customerCount">100+</span> Customers</div>
+</section>
         <p class="site-footer__copy">
-          &copy; <span id="year"></span> Grisch Sourcing. All rights reserved.
+          &copy; <span id="year"></span> Heritage Sourcing. All rights reserved.
         </p>
       </div>
     </footer>
 
     <script>
-      // Map product keys to their 8 image paths (use placeholder paths)
+      const productImageTexts = {
+        product1: [
+          "Ralph Lauren",
+          "Tommy Hilfiger",
+          "Alexandre Mattiussi",
+          "Loro Piana",
+          "Stone Island",
+          "Lacoste",
+          "Yves Saint Laurent",
+          "Jacquemus"
+        ],
+        product2: [
+          "Ralph Lauren ",
+          "Tommy Hilfiger",
+          "Lacoste",
+          "Loro Piana",
+          "Burberry",
+          "Lyle and Scott",
+          "Yves Saint Laurent",
+          "Stone Island"
+        ],
+        product3: [
+          "Tom Ford",
+          "Louis Vuitton",
+          "Yves Saint Laurent",
+          "Prada",
+          "Dior",
+          "Christian Louboutin",
+          "Goyard",
+          "Louis Vuitton Golf"
+        ],
+        product4: [
+          "Omega",
+          "Tissot",
+          "Seiko",
+          "Cartier",
+          "Rolex",
+          "Tag Heuer",
+          "Breitling",
+          "Tudor"
+        ],
+        product5: [
+          "Yves Saint Laurent",
+          "Salvatore Ferragamo",
+          "Diesel",
+          "Hermes",
+          "Dior",
+          "Louis Vuitton",
+          "Gucci",
+          "Hermes"
+        ],
+        product6: [
+          "Zegna",
+          "Loro Piana",
+          "Valentino",
+          "Christian Louboutin",
+          "Hermes",
+          "Prada",
+          "Adidas",
+          "Golden Goose"
+        ],
+        product7: [
+          "Ralph Lauren",
+          "Loro Piana",
+          "Moncler",
+          "Alo",
+          "Miu Miu",
+          "Tom Ford",
+          "Bottega Veneta",
+          "Loewe"
+        ],
+        product8: [
+          "Ralph Lauren Dress Shirts",
+          "Alexandre Mattiussi",
+          "Yves Saint Laurent",
+          "Ralph Lauren Polo",
+          "Lacoste",
+          "Casablanca",
+          "Boss",
+          "Burberry"
+        ]
+      };
+
+      const productImagePrices = {
+        product1: ["From 100 KM", "From 100 KM", "From 150 KM", "From 600 KM", "From 250 KM", "From 120 KM", "From 350 KM", "From 350 KM"],
+        product2: ["From 200 KM", "From 200 KM", "From 200 KM", "From 800 KM", "From 600 KM", "From 150 KM", "From 650 KM", "From 700 KM"],
+        product3: ["From 250 KM", "From 400 KM", "From 250 KM", "From 250 KM", "From 300 KM", "From 350 KM", "From 500 KM", "From 700 KM"],
+        product4: ["From 1800 KM", "From 900 KM", "From 600 KM", "From 4500 KM", "From 12000 KM", "From 2500 KM", "From 5500 KM", "From 2600 KM"],
+        product5: ["From 300 KM", "From 300 KM", "From 250 KM", "From 300 KM", "From 200 KM", "From 200 KM", "From 200 KM", "From 200 KM"],
+        product6: ["From 600 KM", "From 700 KM", "From 500 KM", "From 600 KM", "From 500 KM", "From 500KM", "From 250KM", "From 500KM"],
+        product7: ["From 100KM", "From 300KM", "From 200KM", "From 200KM", "From 200KM", "From 300KM", "From 300KM", "From 300KM"],
+        product8: ["From 150 KM", "From 150 KM", "From 200 KM", "From 100 KM", "From 100 KM", "From 180 KM", "From 100 KM", "From 200 KM"],
+      };
+
       const productImages = {
         product1: [
           'https://i.pinimg.com/control1/736x/f6/7b/a7/f67ba7d47f34cc8cf7ce8e7f2937d302.jpg',
           'https://i.pinimg.com/1200x/6d/cf/04/6dcf043edd63b3da6e61fbce8b2f1e46.jpg',
           'https://i.pinimg.com/1200x/da/85/24/da8524ecc9ed7d2837b910117ecfa96c.jpg',
           'https://i.pinimg.com/control1/1200x/7a/22/87/7a2287f30bbea74c06ec4ecb99a886e7.jpg',
-          'https://i.pinimg.com/control1/736x/10/a2/b0/10a2b075986b865bce96672ee229a2f5.jpg',
+          'https://i.pinimg.com/1200x/ac/82/32/ac823218b4e3c528089657922f3e23aa.jpg',
           'https://i.pinimg.com/1200x/12/e3/0d/12e30dd8b9bcbcd490c3029d20d50400.jpg',
           'https://i.pinimg.com/736x/c9/33/6d/c9336d5708dd38f00ce90a56688ff3b0.jpg',
           'https://i.pinimg.com/control1/1200x/7b/76/7c/7b767c4c6702aa867f5149e6860ab478.jpg',
@@ -79,7 +205,7 @@
           'https://i.pinimg.com/1200x/bd/e1/d9/bde1d9e9bb83b3a2f4e6a884826fd751.jpg',
           'https://i.pinimg.com/1200x/52/52/cc/5252ccc016d44813997e4595d9f26b24.jpg',
           'https://i.pinimg.com/736x/9f/ac/4b/9fac4b815df4e5c33f0968d0e90138b5.jpg',
-          'https://i.pinimg.com/1200x/99/ce/7a/99ce7a814caf980bc5df1adeabf5e05f.jpg',
+          'https://i.pinimg.com/736x/a3/cd/52/a3cd5272400eed7c4453cacf2e56097f.jpg',
         ],
         product3: [
           'https://i.pinimg.com/1200x/32/68/60/3268605dab9bfc79d73dbfd4f32b505a.jpg',
@@ -143,7 +269,6 @@
         ],
       };
 
-      // Get ?item= from URL
       function getQueryParam(name) {
         const url = new URL(window.location.href);
         return url.searchParams.get(name);
@@ -153,28 +278,52 @@
       const images = productImages[item] || productImages['product1'];
       const grid = document.getElementById('product-image-grid');
       grid.innerHTML = '';
+
       images.forEach((src, i) => {
         const div = document.createElement('div');
         div.className = 'image-item';
+        const inputId = `image-textbox-${item || 'default'}-${i}`;
+        const storageKey = `product-image-textbox-${item || 'default'}-${i}`;
+        const savedValue = localStorage.getItem(storageKey) || (productImageTexts[item] ? productImageTexts[item][i] : `Image ${i+1}`);
+        const price = productImagePrices[item] ? productImagePrices[item][i] : '';
+
         div.innerHTML = `
-          <img src="${src}" alt="Product Image ${i+1}" class="product-image" />
-          <div class="image-overlay">
-            <button class="order-btn" type="button">Order Now</button>
-          </div>
-        `;
+  <div style="position:relative; overflow:hidden; aspect-ratio:3/4;">
+    <img src="${src}" alt="Product Image ${i+1}" class="product-image" style="width:100%;height:100%;object-fit:cover;" />
+    <div class="image-overlay">
+      <button class="order-btn" type="button">Reserve Piece</button>
+    </div>
+  </div>
+  <div class="image-textbox" style="padding:0.6rem 0.8rem 0.8rem; display:block;">
+    <p class="product-label" style="font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.16em; text-transform:uppercase; color:#1A1A1A; margin:0; line-height:1.5;">${savedValue}</p>
+    <p class="product-card__price" style="font-family:'Montserrat',sans-serif; font-size:0.72rem; font-weight:500; color:#9A9088; letter-spacing:0.1em; margin:0.2rem 0 0; line-height:1.4;">${price}</p>
+  </div>
+`;
         grid.appendChild(div);
+
+        setTimeout(() => {
+          const input = document.getElementById(inputId);
+          if (input) {
+            input.addEventListener('input', function() {
+              localStorage.setItem(storageKey, input.value);
+            });
+          }
+        }, 0);
       });
 
-      // WhatsApp link from index.html
-      const whatsappUrl = "https://wa.me/38763368323?text=I%20would%20like%20to%20learn%20more%20about%20your%20collection.";
-      // Attach click event to all order buttons
+      const phoneNumber = "38763368323";
+
       grid.addEventListener('click', function(e) {
         if (e.target && e.target.classList.contains('order-btn')) {
+          const itemBox = e.target.closest('.image-item');
+          const productLabel = itemBox.querySelector('.product-label').textContent;
+          const message = `Hello, I'm interested in ordering: ${productLabel} from Heritage Sourcing.`;
+          const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
           window.open(whatsappUrl, '_blank', 'noopener');
         }
       });
     </script>
     <script src="script.js"></script>
+    
   </body>
 </html>
-

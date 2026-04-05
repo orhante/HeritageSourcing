@@ -1,3 +1,31 @@
+// Mobile-only animated counter for Satisfied Clients
+document.addEventListener('DOMContentLoaded', function () {
+  var counter = document.getElementById('mobile-counter');
+  var container = document.getElementById('mobile-counter-container');
+  if (!counter || !container) return;
+  // Only run on mobile
+  if (window.innerWidth > 768) return;
+  var duration = 1200; // ms
+  var start = 0;
+  var end = 100;
+  var startTime = null;
+  function easeOut(t) {
+    return 1 - Math.pow(1 - t, 2);
+  }
+  function animateCounter(ts) {
+    if (!startTime) startTime = ts;
+    var progress = Math.min((ts - startTime) / duration, 1);
+    var eased = easeOut(progress);
+    var value = Math.floor(start + (end - start) * eased);
+    counter.textContent = value;
+    if (progress < 1) {
+      requestAnimationFrame(animateCounter);
+    } else {
+      counter.textContent = end;
+    }
+  }
+  requestAnimationFrame(animateCounter);
+});
 // Custom navigation for hero buttons
 document.addEventListener("DOMContentLoaded", function () {
   // Target the hero section buttons only
@@ -20,6 +48,19 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
   }
+
+  // Cash on Delivery Order Now button handler for collection.html
+  var orderBtns = document.querySelectorAll('.order-now-btn');
+  orderBtns.forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      var product = btn.getAttribute('data-product');
+      var size = btn.getAttribute('data-size');
+      var price = btn.getAttribute('data-price');
+      var url = `checkout.html?product=${encodeURIComponent(product)}&size=${encodeURIComponent(size)}&price=${encodeURIComponent(price)}`;
+      window.location.href = url;
+    });
+  });
 });
 document.addEventListener("DOMContentLoaded", function () {
   var header = document.querySelector(".site-header");
