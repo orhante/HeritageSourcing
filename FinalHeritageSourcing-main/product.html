@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Heritage Sourcing</title>
+    <meta name="description" content="Cashmere Coats from Heritage Sourcing. A quietly luxurious coat crafted from pure cashmere." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+    <style>
+
+      /* ── SLIDER ARROWS ── */
+      .slide-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255,255,255,0.88);
+        border: none;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        font-size: 0.95rem;
+        cursor: pointer;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s, opacity 0.2s;
+        box-shadow: 0 1px 6px rgba(0,0,0,0.13);
+        opacity: 0;
+        pointer-events: none;
+      }
+      .slider-wrap:hover .slide-btn,
+      .slider-wrap:focus-within .slide-btn {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      /* Arrows show when overlay is revealed on mobile */
+      @media (hover: none) {
+        .image-item.tapped .slide-btn { opacity: 1; pointer-events: auto; }
+      }
+      .slide-btn:hover { background: rgba(255,255,255,1); }
+      .slide-prev { left: 9px; }
+      .slide-next { right: 9px; }
+
+      /* ── DOTS ── */
+      .slide-dots {
+        position: absolute;
+        bottom: 11px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 5px;
+        z-index: 20;
+        pointer-events: none;
+      }
+      .dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.4);
+        transition: background 0.22s;
+      }
+      .dot.active { background: #fff; }
+
+      /* ── SLIDES ── */
+      .slides-container {
+        display: flex;
+        height: 100%;
+        transition: transform 0.38s cubic-bezier(.4,0,.2,1);
+        will-change: transform;
+      }
+      .slides-container img {
+        min-width: 100%;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        flex-shrink: 0;
+        display: block;
+      }
+
+      /* ── SLIDER WRAP ── */
+      .slider-wrap {
+        position: relative;
+        overflow: hidden;
+        aspect-ratio: 3/4;
+        background: #f5f3f0;
+      }
+
+      /* ── CARD ── */
+      .image-item {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        cursor: pointer;
+      }
+
+      /* ── SLIDE-UP OVERLAY PANEL ── */
+      .card-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        /* Height covers the label+price bar plus the button */
+        background: rgba(20, 18, 16, 0.82);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+        padding: 1.1rem 1rem 1rem;
+        transform: translateY(100%);
+        transition: transform 0.28s cubic-bezier(.4,0,.2,1);
+        z-index: 15;
+      }
+
+      /* Show on hover (desktop) */
+      .image-item:hover .card-overlay {
+        transform: translateY(0);
+      }
+
+      /* Mobile: tap card to reveal overlay */
+      @media (hover: none) {
+        .card-overlay.visible {
+          transform: translateY(0);
+        }
+      }
+
+      .card-overlay__name {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.6rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.6);
+        margin: 0;
+        line-height: 1;
+      }
+
+      .card-overlay__price {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: #D4B896;
+        letter-spacing: 0.1em;
+        margin: 0;
+        line-height: 1;
+      }
+
+      /* ── RESERVE BUTTON ── */
+      .order-btn {
+        display: inline-block;
+        margin-top: 0.3rem;
+        padding: 0.55rem 1.4rem;
+        background: transparent;
+        border: 1px solid rgba(255,255,255,0.55);
+        color: #fff;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.6rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background 0.18s, border-color 0.18s, color 0.18s;
+        white-space: nowrap;
+      }
+      .order-btn:hover {
+        background: #B89167;
+        border-color: #B89167;
+        color: #fff;
+      }
+      @media (hover: none) {
+        .order-btn {
+          padding: 0.5rem 1.2rem;
+        }
+      }
+
+      /* ── LABEL BELOW CARD (desktop static) ── */
+      .image-textbox {
+        padding: 0.6rem 0.1rem 0.5rem;
+        display: block;
+      }
+      .product-label {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.62rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #1A1A1A;
+        margin: 0;
+        line-height: 1.5;
+      }
+      .product-card__price {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.68rem;
+        font-weight: 500;
+        color: #9A9088;
+        letter-spacing: 0.1em;
+        margin: 0.15rem 0 0;
+        line-height: 1.4;
+      }
+
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="shell site-header__inner">
+        <a href="index.html" class="brand">
+          <span class="brand__overline">Heritage</span>
+          <span class="brand__main">Sourcing</span>
+        </a>
+        <nav class="site-nav" aria-label="Primary">
+          <ul class="site-nav__list">
+            <li class="site-nav__item"><a href="index.html" class="site-nav__link">Home</a></li>
+            <li class="site-nav__item"><a href="collection.html" class="site-nav__link">Collection</a></li>
+            <li class="site-nav__item"><a href="lookbook.html" class="site-nav__link">Atelier</a></li>
+            <li class="site-nav__item"><a href="index.html#about" class="site-nav__link">About</a></li>
+            <li class="site-nav__item"><a href="index.html#contact" class="site-nav__link">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="shell">
+        <div class="collection-info">
+          <h2>Available for Sourcing</h2>
+          <p>
+            These pieces represent brands and styles we can source for you.
+            If something catches your eye, click <strong>Reserve Piece</strong>
+            and we'll arrange availability, sizing and delivery.
+          </p>
+        </div>
+        <div class="how-it-works">
+          <h3>How Ordering Works</h3>
+          <ul class="how-it-works-list">
+            <li>Submit an inquiry for your desired piece.</li>
+            <li>Consult with our sourcing specialist.</li>
+            <li>We source and authenticate your item.</li>
+            <li>Receive your order, delivered discreetly.</li>
+          </ul>
+          <p style="font-size:0.72rem; color:#9A9088; letter-spacing:0.08em; margin-top:0.5rem;">
+            * Prices shown are approximate and may vary based on availability and sizing.
+          </p>
+        </div>
+
+        <div class="product-image-grid" id="product-image-grid"></div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell site-footer__inner">
+        <nav class="site-footer__nav" aria-label="Footer">
+          <a href="index.html" class="site-footer__link">Home</a>
+          <a href="collection.html" class="site-footer__link">Collection</a>
+          <a href="lookbook.html" class="site-footer__link">Atelier</a>
+          <a href="index.html#about" class="site-footer__link">About</a>
+          <a href="index.html#contact" class="site-footer__link">Contact</a>
+        </nav>
+        <section class="trust-row">
+          <div class="trust-item">Authentic Designer Brands</div>
+          <div class="trust-item">Fast Shipping</div>
+          <div class="trust-item">Trusted by <span id="customerCount">100+</span> Customers</div>
+        </section>
+        <p class="site-footer__copy">
+          &copy; <span id="year"></span> Heritage Sourcing. All rights reserved.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      const productCards = {
+
+        product1: [
+          {
+            slides: [
+              'https://i.pinimg.com/control1/736x/f6/7b/a7/f67ba7d47f34cc8cf7ce8e7f2937d302.jpg',
+              'https://cdn-img.poizonapp.com/pro-img/origin-img/20250329/586a814f9c104130998bfda0b9c1128d.jpg?x-oss-process=image/format,webp',
+              'https://www.mrporter.com/variants/images/1647597320401283/in/w2000_q60.jpg',
+            ],
+            label: 'Ralph Lauren',
+            price: 'From 100 KM'
+          },
+          {
+            slides: [
+              'https://cdn-images.farfetch-contents.com/25/84/24/59/25842459_55992151_1000.jpg',
+              'https://img01.ztat.net/article/spp-media-p1/7558eda2ed034954bbb2d1795321f6fb/4a4fd1fa33dd4a1fb1c188ade3bb07c0.jpg?imwidth=1800&filter=packshot',
+              'https://img01.ztat.net/article/spp-media-p1/2d65505bb2b84e4aa7efec430c9c656e/6b168c3d187649db99ecdc87b7d44bbd.jpg?imwidth=1800&filter=packshot',
+            ],
+            label: 'Tommy Hilfiger',
+            price: 'From 100 KM'
+          },
+          {
+            slides: [
+              'https://images1.vinted.net/t/06_024ab_FpfCKf1snRW4HPKaMMV5F7Sm/f800/1775322700.webp?s=4c639220617c37c3c7b3005f477a0e2206ce7a65',
+              'https://images1.vinted.net/t/04_012ba_nWjBXYwmoszfqTCBJUfU4Fb3/f800/1775160679.webp?s=1daa77a9f289a034081a5ee18b080110411e704b',
+              'https://images1.vinted.net/t/06_023a4_YFbprCSYjsktMWu5NePQcrRL/f800/1773226760.webp?s=0b9f2d18a4837af2b9861c1290f4b745845d3d9f',
+            ],
+            label: 'Alexandre Mattiussi',
+            price: 'From 150 KM'
+          },
+          {
+            slides: [
+              'https://media.loropiana.com/HYBRIS/FAF/FAF6086/A16C8A14-315B-44D2-AB87-F2F05201AEFD/FAF6086_M964_MEDIUM.jpg?sw=500&sh=700',
+              'https://media.loropiana.com/PRODUCTS/HYBRIS/FAD/FAD7358/J1YF/FR/1B0C8625-8D34-44E4-9276-02AB175CAC07_FAD7358_J1YF_MEDIUM.jpg?sw=500&sh=700',
+              'https://media.loropiana.com/HYBRIS/FAP/FAP5981/17FB9AA7-FDEF-4540-91E5-793F4AC53176/FAP5981_W000_MEDIUM.jpg?sw=500&sh=700',
+            ],
+            label: 'Loro Piana',
+            price: 'From 600 KM'
+          },
+          {
+            slides: [
+              'https://stoneisland-cdn.thron.com/delivery/public/image/stoneisland/L1S155100034S0N12V0M65_F/ppk73x/std/768x1024/5100034-plated-rib-cotton-boucle,-photo.jpg?scalemode=centered&adjustcrop=reduce&quality=90&format=avif',
+              'https://stoneisland-cdn.thron.com/delivery/public/image/stoneisland/K2S155100040S00A3V0029_F/ppk73x/std/768x1024/5100040-lambswool,-photo.jpg?scalemode=centered&adjustcrop=reduce&quality=90&format=avif',
+              'https://stoneisland-cdn.thron.com/delivery/public/image/stoneisland/L1S155100024S01B2V0020_F/ppk73x/std/768x1024/5100024-micro-stitch-soft-organic-cotton,-photo.jpg?scalemode=centered&adjustcrop=reduce&quality=90&format=avif',
+            ],
+            label: 'Stone Island',
+            price: 'From 250 KM'
+          },
+          {
+            slides: [
+              'https://image1.lacoste.com/dw/image/v2/AAQM_PRD/on/demandware.static/Sites-INT-Site/Sites-master/en/dwd3e7bc6c/AH1957_CCA_24.jpg?imwidth=460&impolicy=pctp',
+              'https://image1.lacoste.com/dw/image/v2/AAQM_PRD/on/demandware.static/Sites-INT-Site/Sites-master/en/dwef888067/AH1951_031_24.jpg?imwidth=460&impolicy=pctp',
+              'https://image1.lacoste.com/dw/image/v2/AAQM_PRD/on/demandware.static/Sites-INT-Site/Sites-master/en/dw05bc7acb/AH7627_802_24.jpg?imwidth=460&impolicy=pctp',
+            ],
+            label: 'Lacoste',
+            price: 'From 120 KM'
+          },
+          {
+            slides: [
+              'https://cdn11.bigcommerce.com/s-mqq1i1xa2c/images/stencil/1280x1280/products/108502/5295774/926714_black_and_other_1__47733.1700140309.jpg?c=1',
+              'https://saint-laurent.dam.kering.com/asset/af8c1e20-7a81-42cd-aa08-c23eb8ed8b3c/Medium/862261Y77IX4100_A.jpg?v=1',
+              'https://editorialist.com/web/2021/9/015/660/414/15660414~black_0.jpg',
+            ],
+            label: 'Yves Saint Laurent',
+            price: 'From 350 KM'
+          },
+          {
+            slides: [
+              'https://cdn.shopify.com/s/files/1/0653/9404/9274/files/mens-jackets-2672681.jpg?v=1772646454&width=1639',
+              'https://cdn.shopify.com/s/files/1/0653/9404/9274/files/mens-jackets-8706755.jpg?v=1770221756&width=1638',
+              'https://cdn.shopify.com/s/files/1/0653/9404/9274/files/mens-jackets-6556985.jpg?v=1769647958&width=1639',
+            ],
+            label: 'Lyle and Scott',
+            price: 'From 120 KM'
+          },
+        ],
+
+        product2: [
+          {
+            slides: [
+              'https://static.lodenfrey.com/out/pictures/master/product/1/00824757-001_1.jpg',
+              'https://www.childrensalon.com/media/catalog/product/r/a/ralph-lauren-boys-beige-cotton-bayport-jacket-587130-e8a0ed680ca3db2f1c17ad416ecbf7df.jpg',
+              'https://i.pinimg.com/1200x/3b/61/8a/3b618aab531a00444daa1e8527437099.jpg',
+            ],
+            label: 'Ralph Lauren',
+            price: 'From 200 KM'
+          },
+          {
+            slides: [
+              'https://shoptommy.scene7.com/is/image/ShopTommy/XM05670_BDS_alternate10?wid=428&hei=564&qlt=80%2C0&resMode=sharp2&op_usm=0.9%2C1.0%2C8%2C0&iccEmbed=0&fmt=webp',
+              'https://shoptommy.scene7.com/is/image/ShopTommy/MW44352_DW5_alternate11?wid=428&hei=564&qlt=80%2C0&resMode=sharp2&op_usm=0.9%2C1.0%2C8%2C0&iccEmbed=0&fmt=webp',
+              'https://shoptommy.scene7.com/is/image/ShopTommy/DM22738_MBL_alternate11?wid=428&hei=564&qlt=80%2C0&resMode=sharp2&op_usm=0.9%2C1.0%2C8%2C0&iccEmbed=0&fmt=webp',
+            ],
+            label: 'Tommy Hilfiger',
+            price: 'From 200 KM'
+          },
+          {
+            slides: [
+              'https://imagena1.lacoste.com/dw/image/v2/AAUP_PRD/on/demandware.static/-/Sites-master/default/dw0ac7337b/BH1349_HDE_24.jpg?imwidth=460&impolicy=pctp',
+              'https://imagena1.lacoste.com/dw/image/v2/AAUP_PRD/on/demandware.static/-/Sites-master/default/dw407e1969/BH7277_HDE_24.jpg?imwidth=460&impolicy=pctp',
+              'https://imagena1.lacoste.com/dw/image/v2/AAUP_PRD/on/demandware.static/-/Sites-master/default/dw0888611a/BH5451_QIZ_24.jpg?imwidth=460&impolicy=pctp',
+            ],
+            label: 'Lacoste',
+            price: 'From 200 KM'
+          },
+          {
+            slides: [
+              'https://media.loropiana.com/HYBRIS/FAR/FAR0433/8B8B7968-6BBF-4B94-8B70-ADCA9EEE2776/FAR0433_M0Z1_MEDIUM.jpg?sw=500&sh=700',
+              'https://media.loropiana.com/PRODUCTS/HYBRIS/FAR/FAR0408/H1A0/FR/740A6047-7DA7-4E27-8025-9ABB25C41CC9_FAR0408_H1A0_MEDIUM.jpg?sw=500&sh=700',
+              'https://media.loropiana.com/HYBRIS/FAQ/FAQ5710/96752D18-16C0-4C16-92B6-8542316E2C25/FAQ5710_W538_MEDIUM.jpg?sw=500&sh=700',
+            ],
+            label: 'Loro Piana',
+            price: 'From 800 KM'
+          },
+          {
+            slides: [
+              'https://assets.burberry.com/is/image/Burberryltd/EEECEB14-883F-4E69-AACA-05CCCB7EF3EB?$BBY_V3_SL_1.275$&wid=580&hei=739',
+              'https://assets.burberry.com/is/image/Burberryltd/EED2056D-DC9D-41A9-8024-E931F5F386EF?$BBY_V3_SL_1.275$&wid=580&hei=739',
+              'https://assets.burberry.com/is/image/Burberryltd/3CBC6153-7FD1-4D9B-BF35-3E0EC74A4160?$BBY_V3_SL_1.275$&wid=580&hei=739',
+            ],
+            label: 'Burberry',
+            price: 'From 600 KM'
+          },
+          {
+            slides: [
+              'https://cdn.shopify.com/s/files/1/0653/9404/9274/files/mens-jackets-4852868.jpg?v=1771949971&width=1200',
+              'https://cdn.shopify.com/s/files/1/0653/9404/9274/files/mens-jackets-3054420.jpg?v=1770081262&width=1638',
+              'https://cdn.shopify.com/s/files/1/0653/9404/9274/files/mens-jackets-3928460.jpg?v=1770305843&width=1638',
+            ],
+            label: 'Lyle and Scott',
+            price: 'From 150 KM'
+          },
+          {
+            slides: [
+              'https://i.pinimg.com/736x/9f/ac/4b/9fac4b815df4e5c33f0968d0e90138b5.jpg',
+              'https://i.pinimg.com/736x/d9/bc/c0/d9bcc0c6894edbd59d1fd4aec584b86a.jpg',
+              'https://i.pinimg.com/1200x/bd/e1/d9/bde1d9e9bb83b3a2f4e6a884826fd751.jpg',
+            ],
+            label: 'Yves Saint Laurent',
+            price: 'From 650 KM'
+          },
+          {
+            slides: [
+              'https://stoneisland-cdn.thron.com/delivery/public/image/stoneisland/L1S144100006S00J9VJ203_F/ppk73x/std/768x1024/4100006-indigo-denim-ultra-bleached,-photo.jpg?scalemode=centered&adjustcrop=reduce&quality=90&format=avif',
+              'https://stoneisland-cdn.thron.com/delivery/public/image/stoneisland/L1S157100002S0290V0020_F/ppk73x/std/768x1024/7100002-waxed-pigment-cotton-tela,-photo.jpg?scalemode=centered&adjustcrop=reduce&quality=90&format=avif',
+              'https://stoneisland-cdn.thron.com/delivery/public/image/stoneisland/L1S154100017S0302V0055_F/ppk73x/std/768x1024/4100017-seam-faded-light-nylon-tela,-photo.jpg?scalemode=centered&adjustcrop=reduce&quality=90&format=avif',
+            ],
+            label: 'Stone Island',
+            price: 'From 700 KM'
+          },
+        ],
+
+        product3: [
+          {
+            slides: [
+              'https://cdn-images.farfetch-contents.com/33/16/38/66/33163866_63794271_1000.jpg',
+              'https://cdn-images.farfetch-contents.com/33/06/54/59/33065459_63520549_1000.jpg',
+              'https://cdn-images.farfetch-contents.com/30/16/30/94/30163094_60534600_1000.jpg',
+            ],
+            label: 'Tom Ford',
+            price: 'From 250 KM'
+          },
+          {
+            slides: [
+              'https://eu.louisvuitton.com/images/is/image/lv/1/PP_VP_L/louis-vuitton-slender-wallet--M14878_PM2_Front%20view.jpg',
+              'https://en.louisvuitton.com/images/is/image/lv/1/PP_VP_L/louis-vuitton-slender-wallet--N40839_PM2_Front%20view.jpg',
+              'https://en.louisvuitton.com/images/is/image/lv/1/PP_VP_M/louis-vuitton--M62472_PM2_Front%20view.jpg?wid=750&hei=870',
+            ],
+            label: 'Louis Vuitton',
+            price: 'From 400 KM'
+          },
+          {
+            slides: [
+              'https://saint-laurent.dam.kering.com/asset/bec17cbe-446e-43a6-a584-fe64feefcfe5/Medium/847954AAET94784_A.jpg?v=2',
+              'https://saint-laurent.dam.kering.com/asset/dadf92ef-090c-4003-868f-81a74bc48937/Medium/847954DZEDW1000_A.jpg?v=2',
+              'https://saint-laurent.dam.kering.com/m/7b0408d53c09482d/Medium-3963070U90E3212_A.jpg?v=2',
+            ],
+            label: 'Yves Saint Laurent',
+            price: 'From 250 KM'
+          },
+          {
+            slides: [
+              'https://www.prada.com/content/dam/pradabkg_products/2/2MO/2MO513/QHHF0007/2MO513_QHH_F0007_SLF.jpg/_jcr_content/renditions/cq5dam.web.hebebed.1000.1000.jpg',
+              'https://www.prada.com/content/dam/pradabkg_products/2/2MO/2MO513/2FPJF0G52/2MO513_2FPJ_F0G52_SLF.jpg/_jcr_content/renditions/cq5dam.web.hebebed.1000.1000.jpg',
+              'https://cdn-images.farfetch-contents.com/13/32/32/55/13323255_40869948_1000.jpg',
+            ],
+            label: 'Prada',
+            price: 'From 250 KM'
+          },
+          {
+            slides: [
+              'https://assets.christiandior.com/is/image/diorprod/2LLBH095MARH00N_SBG_E01-1?$r9x10_raw$&crop=0,0,4000,5000&wid=1024&hei=1107&scale=0.5535&bfc=on&qlt=85',
+              'https://assets.christiandior.com/is/image/diorprod/2ESBH027GLFH523_SBG_E01?$r9x10_raw$&crop=0,0,4000,5000&wid=1024&hei=1107&scale=0.5535&bfc=on&qlt=85',
+              'https://assets.christiandior.com/is/image/diorprod/2ESBC339YSEH27E_SBG_E01?$r9x10_raw$&crop=0,0,4000,5000&wid=1024&hei=1107&scale=0.5535&bfc=on&qlt=85',
+            ],
+            label: 'Dior',
+            price: 'From 300 KM'
+          },
+          {
+            slides: [
+              'https://us.christianlouboutin.com/media/catalog/product/cache/e88e85f4e5336c618abbd9e5f93aeaf8/3/6/3615482992742-3615482992742-main_image-ecommerce-christianlouboutin-mkios-1205015_h734_1_1200x1200.jpg',
+              'https://us.christianlouboutin.com/media/catalog/product/cache/e88e85f4e5336c618abbd9e5f93aeaf8/3/6/3607419946867-3607419946867-main_image-ecommerce-christianlouboutin-mparos-1165160_cm53_1_1200x1200.jpg',
+              'https://us.christianlouboutin.com/media/catalog/product/cache/e88e85f4e5336c618abbd9e5f93aeaf8/3/6/3617770295924-3617770295924-main_image-ecommerce-christianlouboutin-mooncrest-3255210_bg71_1_1200x1200.jpg',
+            ],
+            label: 'Christian Louboutin',
+            price: 'From 350 KM'
+          },
+          {
+            slides: [
+              'https://hippochi.com/cdn/shop/files/goyard-wallet-bags-hippochi-588305.jpg?v=1736276611',
+              'https://kickstw.com.au/wp-content/uploads/2024/05/Goyard-Saint-Sulpice-Card-Wallet-Green.jpg',
+              'https://www.goyard.com/media/wysiwyg/2023/2.PETITEMAROQUINERIE_PORTECARTES_1.png',
+            ],
+            label: 'Goyard',
+            price: 'From 600 KM'
+          },
+          {
+            slides: [
+              'https://kicksgaleria.com/wp-content/uploads/2019/10/gucci-wallet-451268-K551N-1058-01-324x432.jpg',
+              'https://media.gucci.com/style/DarkGray_Center_0_0_490x490/1717090282/768243_FACQC_9773_001_080_0000_Light-brown-interior-gg-bi-fold-wallet.jpg',
+              'https://media.gucci.com/style/DarkGray_Center_0_0_490x490/1694503908/771148_AABXM_1000_001_080_0000_Light-bi-fold-wallet-with-gucci-logo.jpg',
+            ],
+            label: 'Gucci',
+            price: 'From 400 KM'
+          },
+        ],
+
+        product4: [
+          {
+            slides: [
+              'https://i.pinimg.com/1200x/52/c0/1a/52c01a87c7e2d5ea31498d345fd423ae.jpg',
+              'https://d2j6dbq0eux0bg.cloudfront.net/images/16115183/1031955734.jpg',
+              'https://www.caratco.com/cdn/shop/files/omega-seamaster-diver-300m-co-axial-master-chronometer-42-mm-21030422003002-413ac2.png?v=1701201809&width=2048',
+            ],
+            label: 'Omega',
+            price: 'From 1800 KM'
+          },
+          {
+            slides: [
+              'https://laatukoru.com/cdn/shop/products/Tissot_PRX_miesten_rannekello_T1374101104100_1200x.jpg?v=1614900292',
+              'https://www.tissotwatches.com/dw/image/v2/BKKD_PRD/on/demandware.static/-/Sites-Tissot-Catalogue/default/dw633e5283/product-pictures/f7c22bdc-cfd8-4a4a-b572-5f088a97d98b_T127-410-44-041-00_shadow.png?sm=fit&sw=800&sh=800,gravity=center',
+              'https://thediamondbox.co.za/cdn/shop/products/Tissot-PRX-Powermatic-80-Watch-T137_407_11_041_00.jpg?v=1707378663&width=800',
+            ],
+            label: 'Tissot',
+            price: 'From 900 KM'
+          },
+          {
+            slides: [
+              'https://www.wavedials.com/cdn/shop/files/seiko-mod-gmt-kermit-watch-wristwatch-781.webp?v=1761854017&width=958',
+              'https://www.wavedials.com/cdn/shop/files/seiko-mod-submariner-two-tone-black-watch-wristwatch-441.webp?v=1761853996&width=2048',
+              'https://chrono122.com/cdn/shop/files/Seiko-mod-Submariner-black-Chrono122-301020917.png?v=1763254992&width=2048',
+            ],
+            label: 'Seiko',
+            price: 'From 600 KM'
+          },
+          {
+            slides: [
+              'https://www.watchswiss.com/wp-content/uploads/2025/10/CARTIER-Santos-WSSA0096-500x745.png',
+              'https://artoftimeindia.com/cdn/shop/files/CRWSSA0062_2.jpg?v=1754368211',
+              'https://www.watchclub.com/upload/watches/wb/watch-club-cartier-santos-dumont-1372-santosdumont-1768930205079-16321-wb.png',
+            ],
+            label: 'Cartier',
+            price: 'From 4500 KM'
+          },
+          {
+            slides: [
+              'https://www.hlgross.com/cdn/shop/files/m126234-0051_upright_watch_39718f30-564a-4aae-9d39-5b5a046608cb.png?v=1747467080',
+              'https://oracleoftime.com/wp-content/uploads/2023/04/Rolex-Datejust-41mm.jpg',
+              'https://affluent-time.co.uk/cdn/shop/files/86FC4A02-B199-4A6B-85FD-EFC58AA95E41.jpg?v=1684098466',
+            ],
+            label: 'Rolex',
+            price: 'From 12000 KM'
+          },
+          {
+            slides: [
+              'https://www.tagheuer.com/on/demandware.static/-/Sites-tagheuer-master/default/dwa1c72396/TAG_Heuer_Formula_1/CAZ1010.FT8024/CAZ1010.FT8024_Soldier.png',
+              'https://www.tagheuer.com/on/demandware.static/-/Sites-tagheuer-master/default/dw87cf6739/TAG_Heuer_Formula_1/CAZ1011.BA0842/CAZ1011.BA0842_Soldier.png',
+              'https://www.tagheuer.com/on/demandware.static/-/Sites-tagheuer-master/default/dw799899ac/TAG_Heuer_Carrera/CBS2113.BA0053/CBS2113.BA0053_Soldier.png',
+            ],
+            label: 'Tag Heuer',
+            price: 'From 2500 KM'
+          },
+          {
+            slides: [
+              'https://www.breitling.com/cdn-cgi/image/format=auto,width=780,fit=cover,gravity=0x0/api/image-proxy/www-breitling.eu.saleor.cloud/media/products/rb0139211q1p1-soldier_91e6db0c.png',
+              'https://content.thewosgroup.com/productimage/17532559/17532559_1.jpg',
+              'https://www.breitling.com/cdn-cgi/image/format=auto,width=780,fit=cover,gravity=0x0/api/image-proxy/www-breitling.eu.saleor.cloud/media/products/ub3112161c1s1-soldier_8cc052ef.png',
+            ],
+            label: 'Breitling',
+            price: 'From 5500 KM'
+          },
+          {
+            slides: [
+              'https://www.robertgatwardjewellers.co.uk/cdn/shop/files/m7941a1a0nu-0003.jpg?v=1713345621',
+              'https://cdn.shopify.com/s/files/1/2318/6005/files/tudor1.jpg?v=1753203545',
+              'https://content.thewosgroup.com/productimage/17771086/17771086_1.jpg',
+            ],
+            label: 'Tudor',
+            price: 'From 2600 KM'
+          },
+        ],
+
+        product5: [
+          { slides: ['https://i.pinimg.com/1200x/86/93/0a/86930af514e2ed0d76f523bac214cb52.jpg'], label: 'Yves Saint Laurent', price: 'From 300 KM' },
+          { slides: ['https://cdn.ferragamo.com/wcsstore/FerragamoCatalogAssetStore/images/products/776397/776397_00_r20.jpg'], label: 'Salvatore Ferragamo', price: 'From 300 KM' },
+          { slides: ['https://media-assets.grailed.com/prd/listing/temp/d0b209f767b6447fbcc1a7b97f388e40'], label: 'Diesel', price: 'From 250 KM' },
+          { slides: ['https://images.stockx.com/images/Hermes-H-Belt-Buckle-Reversible-Leather-Strap-32mm-Noir-Gold-01.jpg?fit=fill&bg=FFFFFF&w=1200&h=857&q=60&dpr=1&trim=color&trimcolor=ffffff&updated_at=1675286503'], label: 'Hermes', price: 'From 300 KM' },
+          { slides: ['https://i.pinimg.com/control1/1200x/7c/c7/ae/7cc7aedcd893fba97a861eac8d3e669e.jpg'], label: 'Dior', price: 'From 200 KM' },
+          { slides: ['https://barmircollection.com/cdn/shop/products/Screenshot_20221020-232156_Chrome.jpg?v=1667874630'], label: 'Louis Vuitton', price: 'From 200 KM' },
+          { slides: ['https://i.pinimg.com/1200x/b0/35/61/b03561f6d184b47a61419ab661b66e42.jpg'], label: 'Gucci', price: 'From 200 KM' },
+          { slides: ['https://i.pinimg.com/1200x/52/38/61/523861732a6e2d538c81fbd247649d5a.jpg'], label: 'Hermes', price: 'From 200 KM' },
+        ],
+
+        product6: [
+          {
+            slides: [
+              'https://i.pinimg.com/1200x/5e/41/b6/5e41b6fdb10bb93d81e6dbfd1788570b.jpg',
+              'https://www.timeinternational.co.id/wp-content/uploads/triplestitchexotic5-600x450.jpg',
+              'https://cdn-images.farfetch-contents.com/19/46/39/55/19463955_43451309_600.jpg',
+            ],
+            label: 'Zegna',
+            price: 'From 600 KM'
+          },
+          {
+            slides: [
+              'https://www.mytheresa.com/image/1094/1238/100/45/P00935680.jpg',
+              'https://www.mytheresa.com/image/1094/1238/100/09/P01083342.jpg',
+              'https://cdn.clothbase.com/uploads/610d25f3-360c-4434-95c9-2ccbc5df5f88/image.jpg',
+            ],
+            label: 'Loro Piana',
+            price: 'From 700 KM'
+          },
+          {
+            slides: [
+              'https://valentino-cdn.thron.com/delivery/public/image/valentino/68b020bf-cf9c-4ce6-9224-a794a5fc653b/ihqstx/std/500x0/Rockstud-Untitled-Sneaker-In-Calfskin-Leather-With-Tonal-Studs?quality=80&size=35&format=auto',
+              'https://valentino-cdn.thron.com/delivery/public/image/valentino/bb647434-64f4-49db-9418-03ac13f642f9/ihqstx/std/500x0/Upvillage-Crosta-Sneaker?quality=80&size=35&format=auto',
+              'https://valentino-cdn.thron.com/api/v1/content-delivery/shares/RVyRTgf/contents/39b6bdda-19cc-4511-af89-2ddbe3fea8ce/image/39b6bdda-19cc-4511-af89-2ddbe3fea8ce.jpg',
+            ],
+            label: 'Valentino',
+            price: 'From 500 KM'
+          },
+          {
+            slides: [
+              'https://us.christianlouboutin.com/media/catalog/product/cache/c8e9b72c512eaa31cd76a11d9f425a9e/3/2/3240423cm53-3240423cm53-main_image-ecommerce-christianlouboutin-louisjuniorspikes-3240423_cm53_1_1200x1200.jpg',
+              'https://www.mytheresa.com/image/1094/1238/100/1f/P00696470.jpg',
+              'https://www.mytheresa.com/image/1094/1238/100/d0/P01067694_d2.jpg',
+            ],
+            label: 'Christian Louboutin',
+            price: 'From 600 KM'
+          },
+          {
+            slides: [
+              'https://assets.hermes.com/is/image/hermesproduct/bouncing-sneaker--221176Z%2025-front-wm-1-0-0-800-800_g.jpg',
+              'https://ajmanshop.net/wp-content/uploads/Hermes-Shoes-Navy-Blue-AjmanShop.jpg',
+              'https://images.vestiairecollective.com/images/resized/w=2920,q=75,f=auto,/produit/black-leather-chypre-hermes-sandals-46238985-1_2.jpg',
+            ],
+            label: 'Hermes',
+            price: 'From 500 KM'
+          },
+          {
+            slides: [
+              'https://blog.fashionphile.com/wp-content/uploads/2023/09/PradaShoesSizingFit_Hero.jpg',
+              'https://www.prada.com/content/dam/pradabkg_products/3/3E6/3E6500/3LLJF0002/3E6500_3LLJ_F0002_F_025_SLR.jpg',
+              'https://cdn-images.farfetch-contents.com/23/55/93/81/23559381_53526314_600.jpg',
+            ],
+            label: 'Prada',
+            price: 'From 500 KM'
+          },
+          {
+            slides: [
+              'https://static.ftshp.digital/img/p/1/3/7/2/7/6/5/1372765-full_product.jpg',
+              'https://www.stylerave.com/wp-content/uploads/2025/01/IH2612_sivasdescalzo-adidas-HANDBALL_SPEZIAL_SPORTY_RICH-1715940968-3.jpg',
+              'https://newcop.com/cdn/shop/files/adidas-handball-spezial-sporty-rich-green3.png?v=1716564012&width=1445',
+            ],
+            label: 'Adidas',
+            price: 'From 250 KM'
+          },
+          {
+            slides: [
+              'https://www.mytheresa.com/image/1094/1238/100/87/P00894870.jpg',
+              'https://static2.goldengoose.com/public/Style/ECOMM/GWF00101.F000312-60246.jpg',
+              'https://www.mytheresa.com/media/1094/1238/100/f9/P00841951.jpg',
+            ],
+            label: 'Golden Goose',
+            price: 'From 500 KM'
+          },
+        ],
+
+        product7: [
+          { slides: ['https://i.pinimg.com/736x/77/5d/c5/775dc5eaf6f23cec68ce95e5ea785310.jpg'], label: 'Ralph Lauren', price: 'From 100 KM' },
+          { slides: ['https://www.mrporter.com/variants/images/1647597342319972/in/w2000_q60.jpg'], label: 'Loro Piana', price: 'From 300 KM' },
+          { slides: ['https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/L10913B0004804863778_F/image/cotton-gabardine-baseball-cap-men-navy-blue-moncler-0.jpg?w=1300&q=80'], label: 'Moncler', price: 'From 200 KM' },
+          { slides: ['https://shma3astore.com/cdn/shop/files/7ad8e920-c03e-43f9-981d-018b56b40d08.jpg?v=1762447231'], label: 'Alo', price: 'From 200 KM' },
+          { slides: ['https://assets2.sunglasshut.com/cdn-record-files-pi/5a28353f-ce55-4e18-9524-ae220175b3b5/1d515467-f814-42de-98a0-ae230002dd87/0MU_11WS__1AB5S0__P21__shad__qt.png'], label: 'Miu Miu', price: 'From 200 KM' },
+          { slides: ['https://assets2.sunglasshut.com/cdn-record-files-pi/d0edcd37-32e9-4ba1-ab1c-afe4012c9d3b/da3a9195-1a05-4595-b15b-afeb00caadda/0TR001634__1100D1_030A.png'], label: 'Tom Ford', price: 'From 300 KM' },
+          { slides: ['https://www.glassesstation.co.uk/media/thumbs/920x575/media/product_images/Bottega-Veneta-Sunglasses-BV1101S-010fw920fh575.png'], label: 'Bottega Veneta', price: 'From 300 KM' },
+          { slides: ['https://cdn1.visiofactory.com/120666/sunglasses-loewe-anagram-lw40145i-01a-52-21-black.jpg'], label: 'Loewe', price: 'From 300 KM' },
+        ],
+
+        product8: [
+          {
+            slides: [
+              'https://i.pinimg.com/1200x/9e/65/35/9e6535a8a63e2ee9847fe5906b3096e0.jpg',
+              'https://www.onudesignerwear.com/images/polo-ralph-lauren-slim-fit-button-collar-long-sleeve-shirt-black-p2556-5367_image.jpg',
+              'https://xcdn.next.co.uk/common/items/default/default/itemimages/3_4Ratio/product/lge/H30534s.jpg?im=Resize,width=750',
+            ],
+            label: 'Ralph Lauren Dress Shirts',
+            price: 'From 150 KM'
+          },
+          {
+            slides: [
+              'https://www.newbear.nl/cdn/shop/files/1_1464d1a9-8436-43a2-9710-edc70f0f32b3.png?v=1748005256',
+              'https://lelabostore.com/cdn/shop/files/AMI_PARIS_T-SHIRT_PATCH_BLEU_MARINE_03.jpg?v=1739270685',
+              'https://cdn.shopify.com/s/files/1/0774/7865/8352/files/UTS379.726_c15bf8a9-7011-4bfa-a364-6d64cc05279d.jpg?v=1775215744',
+            ],
+            label: 'Alexandre Mattiussi',
+            price: 'From 150 KM'
+          },
+          {
+            slides: [
+              'https://img.vitkac.com/uploads/product_thumb/T-SHIRT%20663278%20Y37AW-4145/up/1.jpg',
+              'https://saint-laurent.dam.kering.com/m/76c030ee79268c69/eCom-844555YCL361001_A.jpg?v=1',
+              'https://wopsterscloset.com/cdn/shop/products/C255BBC4-7ACB-4025-B432-80A86AC10BB2_1024x1024@2x.jpg?v=1675909227',
+            ],
+            label: 'Yves Saint Laurent',
+            price: 'From 200 KM'
+          },
+          {
+            slides: [
+              'https://img01.ztat.net/article/spp-media-p1/3957587ed6284674aa3755dea826df01/5917784ce644449d8edc407aef92b381.jpg?imwidth=762&filter=packshot',
+              'https://img.modivo.cloud/product(e/f/2/3/ef23decc604acaaed0a70a47999cf7085c1f696f_20_0000304842245_PJ.jpg,jpg)/polo-ralph-lauren-polo-323708861113-tamnoplava-regular-fit-0000304842245.jpg',
+              'https://cdn-prod.fluidconfigure.com/imagecomposer/generate/?view=front&recipe=16%2C-1%2C-1%2C-1%2C0%2C0%2C0%2C299%2C%7B%22clipArt%22%3A%22%22%7D%2C1%2C0%2C27%2C6%2C-1%2C-1%2C0%2C0%2C0%2C-1%2C-1%2C29%2C1%2C-1%2C0%2C0%2C-1%2C0%2C0%2C-1%2C-1%2C0%2C0%2C0%2C0%2C-1%2C-1%2C-1%2C-1%2C814%2C0%2C280%2C1%2C3%2C-1%2C0%2C-1%2C-1%2C-1%2C-1%2C0%2C62%2C24%2C7%2C-1%2C0%2C-1%2C-1%2C-1%2C-1%2C0%2C-1%2C-1%2C-1%2C-1%2C0%2C814%2C2%2C3%2C103%2C2%2C13%2C0%2C0%2C0&apiKey=R8lp7_l6U7en-K1C4XrWRYgdjY4bPzVlk&workflow=prod&environment=prod&customerId=1563&productId=21561&configVersion=1768345499093&publishedTime=01%2F28%2F2026%2002%3A29%3A18&purpose=serverDisplay&format=jpg&trim=false&padding=0&scale=0.55&binary=true&quality=91&backgroundColor=%23ffffff',
+            ],
+            label: 'Ralph Lauren Polo',
+            price: 'From 100 KM'
+          },
+          {
+            slides: [
+              'https://dynamic.zacdn.com/Xh4BVvMLyoTNi5no_7G4Cs3tcvQ=/filters:quality(70):format(webp)/https://static-ph.zacdn.com/p/lacoste-1387-6008263-1.jpg',
+              'https://myer-media.com.au/wcsstore/MyerCatalogAssetStore/images/40/401/3323/300/5/356164390/356164390_3_720x928.webp?w=1920&q=75',
+              'https://www.eqvvs.co.uk/cdn/shop/files/3617073799501-_1.jpg?v=1737039491',
+            ],
+            label: 'Lacoste',
+            price: 'From 100 KM'
+          },
+          {
+            slides: [
+              'https://www.onudesignerwear.com/images/casablanca-triomphe-dorange-printed-cotton-t-shirt-white-001-p18715-36344_zoom.jpg',
+              'https://www.flannels.com/images/imgzoom/52/52835203_xxl.jpg',
+              'https://www.crepslocker.com/cdn/shop/files/casablanca-l_arche-tennis-club-graphic-racing-green-t-shirt-back.webp?v=1772797938',
+            ],
+            label: 'Casablanca',
+            price: 'From 180 KM'
+          },
+          {
+            slides: [
+              'https://www.onudesignerwear.com/images/hugo-boss-paul-slim-fit-polo-grey-036-p19175-38423_zoom.jpg',
+              'https://www.vaticanostore.com/cdn/shop/files/110_369d2a47-cf3b-42b6-85d1-5d5334b837b7_1200x.jpg?v=1770405576',
+              'https://images.hugoboss.com/is/image/boss/hbeu50469055_359_100?$re_fullPageZoom$&qlt=85&fit=crop,1&align=1,1&bgcolor=ebebeb&lastModified=1773656367000&wid=1200&hei=1818',
+            ],
+            label: 'Boss',
+            price: 'From 100 KM'
+          },
+          {
+            slides: [
+              'https://assets.burberry.com/is/image/Burberryltd/20715D57-716B-4F0E-BB0B-853FF5E1883D?$BBY_V3_SL_1$&wid=1501&hei=1500',
+              'https://assets.burberry.com/is/image/Burberryltd/D4B15E61-013F-43FF-B1FB-60845CF1EA3C?$BBY_V3_SL_1$&wid=1501&hei=1500',
+              'https://assets.burberry.com/is/image/Burberryltd/A9412E82-2043-4F98-B7E0-3921D7F23AA4?$BBY_V3_SL_1$&wid=1501&hei=1500',
+            ],
+            label: 'Burberry',
+            price: 'From 200 KM'
+          },
+        ],
+      };
+
+      // ─── RENDER ───────────────────────────────────────────────────────────────
+      function getQueryParam(name) {
+        return new URL(window.location.href).searchParams.get(name);
+      }
+
+      const item  = getQueryParam('item') || 'product1';
+      const cards = productCards[item] || productCards['product1'];
+      const grid  = document.getElementById('product-image-grid');
+      grid.innerHTML = '';
+
+      cards.forEach((card) => {
+        let currentSlide = 0;
+        const total = card.slides.length;
+
+        const div = document.createElement('div');
+        div.className = 'image-item';
+
+        div.innerHTML = `
+          <div class="slider-wrap">
+            <div class="slides-container">
+              ${card.slides.map(src => `<img src="${src}" alt="${card.label}" loading="lazy" />`).join('')}
+            </div>
+            ${total > 1 ? `
+              <button class="slide-btn slide-prev" aria-label="Previous slide">&#8592;</button>
+              <button class="slide-btn slide-next" aria-label="Next slide">&#8594;</button>
+              <div class="slide-dots">
+                ${card.slides.map((_, i) => `<span class="dot${i === 0 ? ' active' : ''}"></span>`).join('')}
+              </div>
+            ` : ''}
+            <div class="card-overlay">
+              <p class="card-overlay__name">${card.label}</p>
+              <p class="card-overlay__price">${card.price}</p>
+              <button class="order-btn" type="button">Reserve Piece</button>
+            </div>
+          </div>
+          <div class="image-textbox">
+            <p class="product-label">${card.label}</p>
+            <p class="product-card__price">${card.price}</p>
+          </div>
+        `;
+
+        grid.appendChild(div);
+
+        if (total > 1) {
+          const slidesContainer = div.querySelector('.slides-container');
+          const dots = div.querySelectorAll('.dot');
+
+          function goTo(index) {
+            currentSlide = (index + total) % total;
+            slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+            dots.forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+          }
+
+          div.querySelector('.slide-prev').addEventListener('click', (e) => {
+            e.stopPropagation();
+            goTo(currentSlide - 1);
+          });
+          div.querySelector('.slide-next').addEventListener('click', (e) => {
+            e.stopPropagation();
+            goTo(currentSlide + 1);
+          });
+        }
+
+        // Mobile tap-to-reveal overlay
+        const sliderWrap = div.querySelector('.slider-wrap');
+        const overlay    = div.querySelector('.card-overlay');
+        sliderWrap.addEventListener('click', (e) => {
+          if (e.target.classList.contains('order-btn') ||
+              e.target.classList.contains('slide-btn')) return;
+          if (!window.matchMedia('(hover: none)').matches) return;
+          const isOpen = div.classList.contains('tapped');
+          document.querySelectorAll('.image-item.tapped').forEach(el => {
+            el.classList.remove('tapped');
+            el.querySelector('.card-overlay').classList.remove('visible');
+          });
+          if (!isOpen) {
+            div.classList.add('tapped');
+            overlay.classList.add('visible');
+          }
+        });
+      });
+
+      // ─── WHATSAPP RESERVE ────────────────────────────────────────────────────
+      const phoneNumber = "38763368323";
+      grid.addEventListener('click', function(e) {
+        if (e.target && e.target.classList.contains('order-btn')) {
+          const itemBox   = e.target.closest('.image-item');
+          const label     = itemBox.querySelector('.product-label').textContent;
+          const message   = `Hello, I'm interested in ordering: ${label} from Heritage Sourcing.`;
+          window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
+        }
+      });
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>

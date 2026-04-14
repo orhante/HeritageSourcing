@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atelier | Heritage Sourcing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+  
+    /* 1. RESET & BODY */
+    * { box-sizing: border-box; } /* Prevents padding from breaking width */
+
+    html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        overflow-x: hidden;
+        background: #fafafa;
+    }
+
+    /* 2. THE GRID */
+    .hlb-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      width: 100vw;
+      margin: 0;
+      padding: 0;
+      position: relative;
+      left: 50%;
+      right: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* 3. THE UNIFORM BOX */
+    .hlb-item {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 3 / 4;
+      background: #f0f0f0;
+      margin: 0;
+      border: none;
+    }
+
+    /* 4. THE IMAGE */
+    .hlb-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* CROPS the photo to fill the 3:4 box perfectly */
+        object-position: center; /* Keeps the subject centered */
+        display: block;
+        transition: transform 0.9s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+    /* Add this to a specific hlb-item in the HTML */
+.hlb-item.featured {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+    /* 5. ZOOM EFFECT */
+    .hlb-item:hover .hlb-img {
+        transform: scale(1.08);
+    }
+
+    /* 6. MOBILE FIX (2 columns) */
+    @media (max-width: 1024px) {
+      .hlb-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 per row */
+        gap: 1px;
+        width: 100%;
+        left: 0;
+        transform: none;
+      }
+    }
+</style>
+</head>
+<body class="hlb-body">
+  <header class="site-header">
+    <div class="shell site-header__inner">
+      <a href="index.html" class="brand">
+        <span class="brand__overline">Heritage</span>
+        <span class="brand__main">Sourcing</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <ul class="site-nav__list">
+          <li class="site-nav__item">
+            <a href="index.html" class="site-nav__link">Home</a>
+          </li>
+          <li class="site-nav__item">
+            <a href="collection.html" class="site-nav__link">Collection</a>
+          </li>
+          <li class="site-nav__item">
+            <a href="lookbook.html" class="site-nav__link site-nav__link--active" aria-current="page">Atelier</a>
+          </li>
+          <li class="site-nav__item">
+            <a href="index.html#about" class="site-nav__link">About</a>
+          </li>
+          <li class="site-nav__item">
+            <a href="index.html#contact" class="site-nav__link">Contact</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <div class="hlb-header" style="text-align:center; padding:2rem 1rem 1.2rem 1rem;">
+    <div class="hlb-title">Atelier</div>
+    <div class="hlb-subtitle">Discover curated outfits & shop the details</div>
+  </div>
+  <div class="hlb-grid">
+    
+   <!-- START OF GRID -->
+    
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/8c/9b/c2/8c9bc28260880c92e1a3b68bbed8259d.jpg"></div>
+    </div>
+
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/d5/b4/c2/d5b4c26a92e3b611e1166ccfa3ebe81f.jpg"></div>
+    </div>
+
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/a2/da/f1/a2daf13277cbb98243c51d7537576fe2.jpg"></div>
+    </div>
+
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/99/82/7c/99827c88dceda0794444c6772dd548a4.jpg"></div>
+    </div>
+
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/ee/45/db/ee45dbed243e6cdbf522345a8b8fdad2.jpg"></div>
+    </div>
+
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/d7/31/6b/d7316b9d27fb6de40b0092153606c3d3.jpg"></div>
+    </div>
+
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/fe/e6/aa/fee6aad10e3de5afbe3618c8b14a34a5.jpg"></div>
+    </div>
+
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/1200x/99/a2/ea/99a2eac4d76aa37ef725ef833b29f3b7.jpg"></div>
+    </div>
+
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/3f/b2/75/3fb275a78fadc5f9133bb26a32398b16.jpg"></div>
+    </div>
+
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/9c/64/36/9c6436982cffaa755fade142bd839819.jpg"></div>
+    </div>
+    
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/f5/7b/ea/f57bea902aab3c3fc7d9f10a2163ea86.jpg"></div>
+    </div>
+
+    
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/d4/b6/36/d4b6360f66abee106fa96087a9a4dd5c.jpg"></div>
+    </div>
+
+  
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/76/e1/10/76e11041d009f094c7a13c13c6aac631.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/62/e6/ce/62e6cef1ae2b68265cad4ca47730068c.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/a0/5c/d3/a05cd38f59ccb6b9b9aeb9de1a05a415.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/df/15/e5/df15e530a86cc092647df3046dc0b5a0.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/df/ed/4e/dfed4e2dd7b27125eba59d455dd42a2e.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/1200x/51/6b/22/516b225e8e28512e7c069699049e8432.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/1200x/85/07/c5/8507c5b36dcc410db8f4fd3bbe92afe9.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/1200x/01/84/44/018444a2986389f156cb04217662e5ad.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/1200x/15/9b/9a/159b9a51a42ce5c0805b025bb7a9d5dd.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/1200x/44/59/e6/4459e6bd8b28c7822a8f163da3c48ac5.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/1200x/9c/ee/03/9cee032e47dd7be7f32cad76487942b8.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/16/e1/23/16e123052df7dabcf2ce5dbbc7e9dbbc.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/1200x/98/8a/b3/988ab30cdbdf7bcd658674cd02b9a7ad.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/1200x/d8/ed/c7/d8edc7a64518154fef33af74992ead64.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/15/17/ae/1517ae61b087440c356535aec506a37e.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/1200x/ca/c7/17/cac71769dfaad9e2ec19ca1d6e72b20c.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/96/76/e1/9676e1bd443f1e9105af5a033c92fcd6.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/1200x/68/dd/c7/68ddc7765851b5c61175e4d42f0b02ac.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/6d/a1/4e/6da14e72a2f78854b563ebdf46cbf771.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/f2/c3/b2/f2c3b2d14778f2907938884bf64156ea.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/e2/12/03/e21203305c655a4ba7e73edca0c9f120.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/1200x/db/87/07/db87077ffa88851c316ec66da2095730.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/27/88/06/278806baad66d18a0f1e436665d7c6eb.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/1200x/48/eb/84/48eb8415956d79547e0a7a75c99ae2da.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/1200x/4f/68/d4/4f68d4518ccee3c6133e92ef08f058e2.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/85/7f/b7/857fb7cbd7931fb6e353e09e327a21a3.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/1f/52/45/1f5245e02d9dd884c92808abd22e8f07.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/e4/41/34/e441342fe5d077e097f2d2c3bb741213.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/1200x/13/ca/aa/13caaaf86b28a3153ecbce21127863a5.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/72/ad/01/72ad0100f917908e54506e2a5d2190e7.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/40/d8/98/40d898618af7cab4410a4f4fa89d53da.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/1200x/bf/af/25/bfaf25a2b3186493cf5d3cb0e25cc37c.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/1200x/a3/d7/76/a3d7762f5e9a917d4e18a9ed79cb2f05.jpg"></div>
+    </div>
+    <div class="hlb-item">
+      <div class="hlb-img-wrap"><img class="hlb-img" src="https://i.pinimg.com/736x/51/81/d9/5181d9ee982e6aa848eb438ff471ba3a.jpg"></div>
+    </div>
+
+
+
+  </div> 
+  <!-- END OF GRID -->
+
+  <script>
+    // Parallax logic (optional)
+    document.addEventListener('scroll', function() {
+      document.querySelectorAll('.hlb-img-wrap').forEach(function(el) {
+        var rect = el.getBoundingClientRect();
+        var windowHeight = window.innerHeight;
+        var offset = (rect.top + rect.height/2 - windowHeight/2) / windowHeight;
+        el.querySelector('.hlb-img').style.transform = 'scale(1.08) translateY(' + (offset * 20) + 'px)';
+      });
+    }, { passive: true });
+  </script>
+</body>
+</html>

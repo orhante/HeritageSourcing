@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout — Heritage Sourcing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #FDFCFA;
+      --gold: #B89167;
+      --gold-light: #D4B896;
+      --dark: #1A1A1A;
+      --mid: #7A6E66;
+      --muted: #9A9088;
+      --border: rgba(180,165,140,0.25);
+      --border-strong: rgba(180,165,140,0.45);
+    }
+
+    body {
+      background: var(--cream);
+      font-family: 'Raleway', sans-serif;
+      color: var(--dark);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .site-header {
+      border-bottom: 1px solid var(--border);
+      background: var(--cream);
+      padding: 1.1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand { text-decoration: none; line-height: 1; }
+    .brand__overline { display: block; font-family: 'Raleway', sans-serif; font-size: 0.55rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); }
+    .brand__main { display: block; font-family: 'Cinzel', serif; font-size: 1.15rem; letter-spacing: 0.18em; color: var(--dark); }
+    .back-link { font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--border); padding-bottom: 1px; }
+    .back-link:hover { color: var(--gold); border-color: var(--gold); }
+
+    /* ── LAYOUT ── */
+    .checkout-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+    @media (max-width: 680px) {
+      .checkout-wrap {
+        grid-template-columns: 1fr;
+        gap: 0;
+        padding: 1.5rem 1.1rem 4rem;
+      }
+      .order-panel {
+        order: -1;
+        position: static !important;
+        margin-bottom: 2rem;
+      }
+      .trust-list { display: none; }
+      .form-panel { position: static; }
+    }
+
+    /* ── ORDER SUMMARY ── */
+    .order-panel { position: sticky; top: 2rem; }
+    .panel-label {
+      font-size: 0.58rem; letter-spacing: 0.26em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.2rem;
+    }
+    .product-card-summary {
+      border: 1px solid var(--border);
+      padding: 1.4rem;
+      background: #fff;
+    }
+    .product-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      letter-spacing: 0.07em;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+    .product-detail {
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+    .product-price {
+      font-family: 'Cinzel', serif;
+      font-size: 1.3rem;
+      color: var(--dark);
+      margin-top: 1rem;
+      letter-spacing: 0.05em;
+    }
+    .divider { border: none; border-top: 1px solid var(--border); margin: 1.2rem 0; }
+
+    .trust-list { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; margin-top: 1.5rem; }
+    .trust-list li {
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .trust-list li::before {
+      content: '';
+      display: inline-block;
+      width: 4px; height: 4px;
+      background: var(--gold);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── FORM ── */
+    .section-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.14em;
+      color: var(--dark);
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .field { margin-bottom: 1rem; }
+    .field label {
+      display: block;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+    .field input {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: #fff;
+      padding: 0.65rem 0.85rem;
+      font-size: 0.85rem;
+      font-family: 'Raleway', sans-serif;
+      color: var(--dark);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .field input:focus { border-color: var(--gold); }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    @media (max-width: 400px) { .field-row { grid-template-columns: 1fr; } }
+    .field-optional { font-size: 0.55rem; letter-spacing: 0.1em; color: var(--muted); margin-left: 0.4rem; text-transform: none; font-style: italic; }
+
+    /* ── PAYMENT OPTIONS ── */
+    .payment-section { margin: 1.8rem 0 1.5rem; }
+    .pay-options { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.8rem; }
+    .pay-opt {
+      border: 1px solid var(--border);
+      padding: 0.9rem 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: #fff;
+      transition: border-color 0.15s, background 0.15s;
+      user-select: none;
+    }
+    .pay-opt:hover { border-color: var(--gold-light); }
+    .pay-opt.active { border-color: var(--gold); background: #FAF7F3; }
+    .pay-opt input[type=radio] { accent-color: var(--gold); width: 15px; height: 15px; flex-shrink: 0; }
+    .pay-opt-info { flex: 1; }
+    .pay-opt-name { font-size: 0.82rem; font-weight: 500; color: var(--dark); letter-spacing: 0.03em; }
+    .pay-opt-desc { font-size: 0.67rem; color: var(--muted); margin-top: 0.15rem; }
+    .pay-badge {
+      font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.2rem 0.55rem; border: 1px solid; flex-shrink: 0;
+    }
+    .badge-green { background: #EAF3DE; color: #3B6D11; border-color: rgba(59,109,17,0.2); }
+    .badge-blue  { background: #E6F1FB; color: #185FA5; border-color: rgba(24,95,165,0.2); }
+
+    /* ── SUBMIT ── */
+    .btn-submit {
+      width: 100%;
+      background: var(--dark);
+      color: #F5F0E8;
+      border: none;
+      padding: 1rem;
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 0.5rem;
+    }
+    .btn-submit:hover { background: #2E2E2E; }
+    .btn-submit:disabled { background: #888; cursor: not-allowed; }
+
+    /* ── SHIPPING NOTE ── */
+    .shipping-note {
+      margin-top: 1rem;
+      padding: 0.8rem 1rem;
+      background: #FAF7F3;
+      border: 1px solid var(--border);
+      font-size: 0.68rem;
+      color: var(--mid);
+      letter-spacing: 0.06em;
+      line-height: 1.6;
+    }
+    .shipping-note strong { color: var(--dark); }
+
+    /* ── SUCCESS ── */
+    #success-screen { display: none; }
+    .success-icon {
+      width: 52px; height: 52px;
+      background: #EAF3DE;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 0 1.4rem;
+    }
+    .success-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      color: var(--dark);
+      margin-bottom: 0.6rem;
+    }
+    .success-body {
+      font-size: 0.8rem;
+      color: var(--mid);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    .success-actions { display: flex; flex-direction: column; gap: 0.6rem; }
+    .btn-wa {
+      display: block; text-align: center; text-decoration: none;
+      background: #25D366; color: #fff;
+      padding: 0.85rem; font-family: 'Raleway', sans-serif;
+      font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .btn-back {
+      display: block; text-align: center; text-decoration: none;
+      background: var(--dark); color: #F5F0E8;
+      padding: 0.85rem; font-family: 'Raleway', sans-serif;
+      font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .btn-paypal {
+      display: block; text-align: center; text-decoration: none;
+      background: #003087; color: #fff;
+      padding: 0.85rem; font-family: 'Raleway', sans-serif;
+      font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .btn-paid {
+      display: block; text-align: center;
+      background: #1A1A1A; color: #F5F0E8;
+      border: 1px solid var(--gold);
+      padding: 0.85rem; font-family: 'Raleway', sans-serif;
+      font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+      cursor: pointer; width: 100%; transition: background 0.2s;
+    }
+    .btn-paid:hover:not(:disabled) { background: #2E2E2E; }
+    .btn-paid:disabled { background: #3B6D11; border-color: #3B6D11; cursor: default; }
+
+    /* ── CONFIRM DIALOG ── */
+    .confirm-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+    }
+    .confirm-overlay.open { display: flex; }
+    .confirm-box {
+      background: var(--cream);
+      border: 1px solid var(--border-strong);
+      padding: 2rem;
+      max-width: 360px;
+      width: 90%;
+    }
+    .confirm-box p {
+      font-size: 0.8rem;
+      color: var(--mid);
+      line-height: 1.7;
+      margin-bottom: 1.2rem;
+    }
+    .confirm-box strong {
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      color: var(--dark);
+      display: block;
+      margin-bottom: 0.6rem;
+      letter-spacing: 0.08em;
+    }
+    .confirm-actions { display: flex; gap: 0.6rem; }
+    .confirm-actions button {
+      flex: 1;
+      padding: 0.75rem;
+      border: 1px solid var(--border-strong);
+      background: #fff;
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .confirm-actions .btn-confirm-yes {
+      background: var(--dark);
+      color: #F5F0E8;
+      border-color: var(--dark);
+    }
+    .confirm-actions .btn-confirm-yes:hover { background: #2E2E2E; }
+    .confirm-actions .btn-confirm-no:hover { background: #f0ece6; }
+
+    /* ── FOOTER ── */
+    .site-footer-simple {
+      border-top: 1px solid var(--border);
+      padding: 1.4rem 2rem;
+      text-align: center;
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <a href="index.html" class="brand">
+      <span class="brand__overline">Heritage</span>
+      <span class="brand__main">Sourcing</span>
+    </a>
+    <a href="collection.html" class="back-link">← Back to collection</a>
+  </header>
+
+  <!-- Payment confirmation dialog -->
+  <div class="confirm-overlay" id="confirm-overlay">
+    <div class="confirm-box">
+      <strong>Have you completed your payment?</strong>
+      <p>Please confirm only after your PayPal payment has been fully processed. This will notify us to prepare your shipment.</p>
+      <div class="confirm-actions">
+        <button class="btn-confirm-no" id="btn-confirm-no">Not yet</button>
+        <button class="btn-confirm-yes" id="btn-confirm-yes">Yes, I've paid</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="checkout-wrap">
+
+    <!-- LEFT: Order Summary -->
+    <div class="order-panel">
+      <p class="panel-label">Your order</p>
+      <div class="product-card-summary">
+        <p class="product-name" id="sum-name">—</p>
+        <p class="product-detail">Size: <span id="sum-size">—</span></p>
+        <hr class="divider">
+        <p class="product-price" id="sum-price">—</p>
+      </div>
+      <ul class="trust-list">
+        <li>Every piece verified authentic</li>
+        <li>Ships within 24h of confirmed order</li>
+        <li>All sales final — no returns</li>
+        <li>WhatsApp support available</li>
+      </ul>
+    </div>
+
+    <!-- RIGHT: Form -->
+    <div class="form-panel">
+
+      <!-- Step 1: Form -->
+      <div id="form-screen">
+        <p class="section-title">Delivery details</p>
+
+        <div class="field">
+          <label>Full name</label>
+          <input type="text" id="f-name" placeholder="Your full name" required />
+        </div>
+        <div class="field">
+          <label>Phone / WhatsApp</label>
+          <input type="tel" id="f-phone" placeholder="+387 or +49 ..." required />
+        </div>
+        <div class="field">
+          <label>Email <span class="field-optional">(optional — for order confirmation)</span></label>
+          <input type="email" id="f-email" placeholder="your@email.com" />
+        </div>
+        <div class="field">
+          <label>Street address</label>
+          <input type="text" id="f-address" placeholder="Street and number" required />
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>City</label>
+            <input type="text" id="f-city" placeholder="City" required />
+          </div>
+          <div class="field">
+            <label>Postal code</label>
+            <input type="text" id="f-zip" placeholder="Zip" required />
+          </div>
+        </div>
+        <div class="field">
+          <label>Country</label>
+          <input type="text" id="f-country" placeholder="Bosnia, Germany, Austria..." required />
+        </div>
+
+        <div class="payment-section">
+          <p class="section-title">Payment method</p>
+          <div class="pay-options">
+            <label class="pay-opt active" id="opt-cod" onclick="selectPay('cod')">
+              <input type="radio" name="pay" value="cod" checked />
+              <div class="pay-opt-info">
+                <p class="pay-opt-name">Pay on delivery</p>
+                <p class="pay-opt-desc">Cash when your order arrives</p>
+              </div>
+              <span class="pay-badge badge-green">Bosnia</span>
+            </label>
+            <label class="pay-opt" id="opt-paypal" onclick="selectPay('paypal')">
+              <input type="radio" name="pay" value="paypal" />
+              <div class="pay-opt-info">
+                <p class="pay-opt-name">PayPal</p>
+                <p class="pay-opt-desc">Pay with your PayPal account</p>
+              </div>
+              <span class="pay-badge badge-blue">Europe</span>
+            </label>
+            <label class="pay-opt" id="opt-card" onclick="selectPay('card')">
+              <input type="radio" name="pay" value="card" />
+              <div class="pay-opt-info">
+                <p class="pay-opt-name">Card payment</p>
+                <p class="pay-opt-desc">Visa, Mastercard, Amex — no PayPal account needed</p>
+              </div>
+              <span class="pay-badge badge-blue">Europe</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="shipping-note">
+          <strong>Shipping & Returns</strong><br>
+          All orders ship via courier within 24h of confirmation. All sales are final — we do not accept returns. For questions, reach us on WhatsApp before ordering.
+        </div>
+
+        <button class="btn-submit" id="btn-place" onclick="placeOrder()">Confirm order</button>
+      </div>
+
+      <!-- Step 2: Success -->
+      <div id="success-screen">
+        <div class="success-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M4 11l5 5 9-9" stroke="#3B6D11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <p class="success-title" id="s-title"></p>
+        <p class="success-body" id="s-body"></p>
+        <div class="success-actions" id="s-actions"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="site-footer-simple">
+    &copy; <span id="yr"></span> Heritage Sourcing &nbsp;·&nbsp; All rights reserved &nbsp;·&nbsp; All sales final · Ships within 24h
+  </footer>
+
+  <script>
+    emailjs.init('OEY97-JgBjz3TJ0ei');
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    var PAYPAL_ME = 'https://www.paypal.me/Heritagesourcing';
+    var WA_NUMBER = '38763368323';
+
+    // BAM to EUR conversion rate (approximate — update as needed)
+    var BAM_TO_EUR = 0.51;
+
+    function getParam(n) {
+      return new URLSearchParams(window.location.search).get(n) || '';
+    }
+
+    var product = getParam('product');
+    var size    = getParam('size');
+    var price   = getParam('price');
+
+    document.getElementById('sum-name').textContent  = product || 'Unknown item';
+    document.getElementById('sum-size').textContent  = size    || '—';
+    document.getElementById('sum-price').textContent = price   || '—';
+
+    function selectPay(val) {
+      ['cod','paypal','card'].forEach(function(id) {
+        var el = document.getElementById('opt-' + id);
+        var radio = el.querySelector('input');
+        if (id === val) { el.classList.add('active'); radio.checked = true; }
+        else            { el.classList.remove('active'); }
+      });
+    }
+
+    // Convert price string like "450KM" → EUR amount as number
+    function priceToEur(priceStr) {
+      var num = parseFloat(priceStr.replace(/[^0-9.]/g, ''));
+      if (isNaN(num)) return '';
+      return Math.round(num * BAM_TO_EUR);
+    }
+
+    function placeOrder() {
+      var name    = document.getElementById('f-name').value.trim();
+      var phone   = document.getElementById('f-phone').value.trim();
+      var email   = document.getElementById('f-email').value.trim();
+      var address = document.getElementById('f-address').value.trim();
+      var city    = document.getElementById('f-city').value.trim();
+      var zip     = document.getElementById('f-zip').value.trim();
+      var country = document.getElementById('f-country').value.trim();
+
+      if (!name || !phone || !address || !city || !zip || !country) {
+        alert('Please fill in all required fields before continuing.');
+        return;
+      }
+
+      var method = document.querySelector('input[name=pay]:checked').value;
+      var btn = document.getElementById('btn-place');
+      btn.disabled = true;
+      btn.textContent = 'Processing...';
+
+      var waMsg = encodeURIComponent(
+        'New order — Heritage Sourcing\n\n' +
+        'Product: ' + product + '\nSize: ' + size + '\nPrice: ' + price + '\n\n' +
+        'Customer: ' + name + '\nPhone: ' + phone +
+        (email ? '\nEmail: ' + email : '') +
+        '\nAddress: ' + address + ', ' + city + ' ' + zip + ', ' + country + '\n' +
+        'Payment: ' + method
+      );
+      var waUrl = 'https://wa.me/' + WA_NUMBER + '?text=' + waMsg;
+
+      var emailParams = {
+        product: product,
+        size: size,
+        price: price,
+        name: name,
+        phone: phone,
+        email: email || 'Not provided',
+        address: address + ', ' + city + ' ' + zip + ', ' + country,
+        payment: method
+      };
+
+      if (method === 'cod') {
+        emailjs.send('service_ks90jyq', 'template_obynd5c', emailParams)
+          .then(function()  { showSuccess(method, waUrl, emailParams); })
+          .catch(function() { showSuccess(method, waUrl, emailParams); });
+      } else {
+        showSuccess(method, waUrl, emailParams);
+      }
+    }
+
+    var _pendingEmailParams = null;
+    var _pendingBtn = null;
+
+    function confirmPaymentDone(btn, emailParams) {
+      // Show confirmation dialog instead of acting immediately
+      _pendingEmailParams = emailParams;
+      _pendingBtn = btn;
+      document.getElementById('confirm-overlay').classList.add('open');
+    }
+
+    document.getElementById('btn-confirm-no').addEventListener('click', function() {
+      document.getElementById('confirm-overlay').classList.remove('open');
+    });
+
+    document.getElementById('btn-confirm-yes').addEventListener('click', function() {
+      document.getElementById('confirm-overlay').classList.remove('open');
+      if (!_pendingBtn || !_pendingEmailParams) return;
+      _pendingBtn.disabled = true;
+      _pendingBtn.textContent = 'Confirming...';
+      emailjs.send('service_ks90jyq', 'template_obynd5c', _pendingEmailParams)
+        .then(function()  { _pendingBtn.textContent = '✓ Order confirmed — we\'ll ship within 24h'; })
+        .catch(function() { _pendingBtn.textContent = '✓ Order confirmed — we\'ll ship within 24h'; });
+    });
+
+    function showSuccess(method, waUrl, emailParams) {
+      document.getElementById('form-screen').style.display = 'none';
+      var ss = document.getElementById('success-screen');
+      ss.style.display = 'block';
+
+      var title   = document.getElementById('s-title');
+      var body    = document.getElementById('s-body');
+      var actions = document.getElementById('s-actions');
+
+      if (method === 'cod') {
+        title.textContent = 'Order confirmed';
+        body.textContent  = 'Your order has been received. Pay cash when your item arrives. Tap below to send us a quick WhatsApp so we can confirm your delivery slot.';
+        actions.innerHTML =
+          '<a class="btn-wa" href="' + waUrl + '" target="_blank">Confirm on WhatsApp</a>' +
+          '<a class="btn-back" href="collection.html">Back to collection</a>';
+
+      } else {
+        // FIX: convert BAM to EUR correctly
+        var eurAmount = priceToEur(price);
+        var paypalUrl = PAYPAL_ME + '/' + eurAmount + 'EUR';
+        var btnLabel  = method === 'paypal' ? 'Pay with PayPal' : 'Pay by card (via PayPal)';
+
+        title.textContent = 'Complete your payment';
+        body.innerHTML =
+          'Click below to pay via PayPal. The amount is approximately <strong>' + eurAmount + ' EUR</strong> (converted from ' + price + ').<br><br>' +
+          'Once your payment is done, press <em>"I\'ve paid"</em> — this confirms your order and we\'ll ship within 24 hours.';
+
+        actions.innerHTML =
+          '<a class="btn-paypal" href="' + paypalUrl + '" target="_blank">' + btnLabel + '</a>' +
+          '<button class="btn-paid" id="btn-paid">I\'ve paid — confirm my order</button>' +
+          '<a class="btn-wa" href="' + waUrl + '" target="_blank">Also confirm on WhatsApp</a>' +
+          '<a class="btn-back" href="collection.html">Back to collection</a>';
+
+        document.getElementById('btn-paid').addEventListener('click', function() {
+          confirmPaymentDone(this, emailParams);
+        });
+      }
+    }
+  </script>
+</body>
+</html>
