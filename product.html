@@ -37,10 +37,6 @@
         opacity: 1;
         pointer-events: auto;
       }
-      /* Arrows show when overlay is revealed on mobile */
-      @media (hover: none) {
-        .image-item.tapped .slide-btn { opacity: 1; pointer-events: auto; }
-      }
       .slide-btn:hover { background: rgba(255,255,255,1); }
       .slide-prev { left: 9px; }
       .slide-next { right: 9px; }
@@ -98,91 +94,12 @@
         cursor: pointer;
       }
 
-      /* ── SLIDE-UP OVERLAY PANEL ── */
-      .card-overlay {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        /* Height covers the label+price bar plus the button */
-        background: rgba(20, 18, 16, 0.82);
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 0.35rem;
-        padding: 1.1rem 1rem 1rem;
-        transform: translateY(100%);
-        transition: transform 0.28s cubic-bezier(.4,0,.2,1);
-        z-index: 15;
-      }
-
-      /* Show on hover (desktop) */
-      .image-item:hover .card-overlay {
-        transform: translateY(0);
-      }
-
-      /* Mobile: tap card to reveal overlay */
-      @media (hover: none) {
-        .card-overlay.visible {
-          transform: translateY(0);
-        }
-      }
-
-      .card-overlay__name {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 0.6rem;
-        letter-spacing: 0.22em;
-        text-transform: uppercase;
-        color: rgba(255,255,255,0.6);
-        margin: 0;
-        line-height: 1;
-      }
-
-      .card-overlay__price {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 0.72rem;
-        font-weight: 600;
-        color: #D4B896;
-        letter-spacing: 0.1em;
-        margin: 0;
-        line-height: 1;
-      }
-
-      /* ── RESERVE BUTTON ── */
-      .order-btn {
-        display: inline-block;
-        margin-top: 0.3rem;
-        padding: 0.55rem 1.4rem;
-        background: transparent;
-        border: 1px solid rgba(255,255,255,0.55);
-        color: #fff;
-        font-family: 'Montserrat', sans-serif;
-        font-size: 0.6rem;
-        letter-spacing: 0.22em;
-        text-transform: uppercase;
-        cursor: pointer;
-        transition: background 0.18s, border-color 0.18s, color 0.18s;
-        white-space: nowrap;
-      }
-      .order-btn:hover {
-        background: #B89167;
-        border-color: #B89167;
-        color: #fff;
-      }
-      @media (hover: none) {
-        .order-btn {
-          padding: 0.5rem 1.2rem;
-        }
-      }
-
-      /* ── LABEL BELOW CARD (desktop static) ── */
+      /* ── LABEL BELOW CARD ── */
       .image-textbox {
-        padding: 0.6rem 0.1rem 0.5rem;
+        padding: 0.75rem 0.1rem 0.5rem;
         display: block;
       }
+
       .product-label {
         font-family: 'Montserrat', sans-serif;
         font-size: 0.62rem;
@@ -191,7 +108,34 @@
         color: #1A1A1A;
         margin: 0;
         line-height: 1.5;
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+        padding-bottom: 3px;
+        transition: color 0.25s ease;
       }
+
+      .product-label::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background-color: #D4B896;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.28s ease;
+      }
+
+      .product-label:hover {
+        color: #B89167;
+      }
+
+      .product-label:hover::after {
+        transform: scaleX(1);
+      }
+
       .product-card__price {
         font-family: 'Montserrat', sans-serif;
         font-size: 0.68rem;
@@ -229,7 +173,7 @@
           <h2>Available for Sourcing</h2>
           <p>
             These pieces represent brands and styles we can source for you.
-            If something catches your eye, click <strong>Reserve Piece</strong>
+            If something catches your eye, click the brand name below any piece
             and we'll arrange availability, sizing and delivery.
           </p>
         </div>
@@ -751,6 +695,7 @@
         return new URL(window.location.href).searchParams.get(name);
       }
 
+      const phoneNumber = "38763368323";
       const item  = getQueryParam('item') || 'product1';
       const cards = productCards[item] || productCards['product1'];
       const grid  = document.getElementById('product-image-grid');
@@ -775,11 +720,6 @@
                 ${card.slides.map((_, i) => `<span class="dot${i === 0 ? ' active' : ''}"></span>`).join('')}
               </div>
             ` : ''}
-            <div class="card-overlay">
-              <p class="card-overlay__name">${card.label}</p>
-              <p class="card-overlay__price">${card.price}</p>
-              <button class="order-btn" type="button">Reserve Piece</button>
-            </div>
           </div>
           <div class="image-textbox">
             <p class="product-label">${card.label}</p>
@@ -808,33 +748,14 @@
             goTo(currentSlide + 1);
           });
         }
-
-        // Mobile tap-to-reveal overlay
-        const sliderWrap = div.querySelector('.slider-wrap');
-        const overlay    = div.querySelector('.card-overlay');
-        sliderWrap.addEventListener('click', (e) => {
-          if (e.target.classList.contains('order-btn') ||
-              e.target.classList.contains('slide-btn')) return;
-          if (!window.matchMedia('(hover: none)').matches) return;
-          const isOpen = div.classList.contains('tapped');
-          document.querySelectorAll('.image-item.tapped').forEach(el => {
-            el.classList.remove('tapped');
-            el.querySelector('.card-overlay').classList.remove('visible');
-          });
-          if (!isOpen) {
-            div.classList.add('tapped');
-            overlay.classList.add('visible');
-          }
-        });
       });
 
-      // ─── WHATSAPP RESERVE ────────────────────────────────────────────────────
-      const phoneNumber = "38763368323";
+      // ─── WHATSAPP RESERVE via brand name click ────────────────────────────────
       grid.addEventListener('click', function(e) {
-        if (e.target && e.target.classList.contains('order-btn')) {
-          const itemBox   = e.target.closest('.image-item');
-          const label     = itemBox.querySelector('.product-label').textContent;
-          const message   = `Hello, I'm interested in ordering: ${label} from Heritage Sourcing.`;
+        const label = e.target.closest('.product-label');
+        if (label) {
+          const brandName = label.textContent.trim();
+          const message = `Hello, I'm interested in ordering: ${brandName} from Heritage Sourcing.`;
           window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
         }
       });
