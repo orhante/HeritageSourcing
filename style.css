@@ -1421,3 +1421,53 @@ body {
   background: #fff;
   color: #141210;
 }
+@media (max-width: 768px) {
+  /* 1. Stack Brand and Nav vertically, but keep them Left-Aligned */
+  .site-header__inner {
+    flex-direction: column !important;
+    align-items: flex-start !important; /* Forces everything to the left */
+    gap: 1rem !important;
+    padding: 1rem 0.7rem !important;
+  }
+
+  /* 2. Ensure the Brand doesn't center itself */
+  .brand {
+    text-align: left;
+    margin: 0 !important;
+    padding-left: 0.5rem;
+  }
+
+  /* 3. Make ONLY the nav row scrollable underneath */
+  .site-nav {
+    width: 100%; /* Spans the width of the container */
+    overflow-x: auto; /* The magic horizontal scroll */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Hide scrollbar Firefox */
+  }
+
+  /* 4. Hide scrollbar for Chrome/Safari */
+  .site-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* 5. Force the list to stay in one horizontal line starting from the left */
+  .site-nav__list {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    justify-content: flex-start !important;
+    gap: 1.2rem !important;
+    margin: 0;
+    padding: 0 0.5rem; /* Aligns first link with the logo text */
+  }
+
+  .site-nav__item {
+    flex: 0 0 auto; /* Keeps links from squishing */
+  }
+
+  .site-nav__link {
+    white-space: nowrap;
+    font-size: 0.95rem !important;
+    padding: 0.5rem 0;
+  }
+}
