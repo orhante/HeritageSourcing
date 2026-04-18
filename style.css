@@ -1422,55 +1422,55 @@ body {
   color: #141210;
 }
 @media (max-width: 768px) {
-  /* 1. Stack Brand and Nav vertically, but keep them Left-Aligned */
+  /* 1. Stack Brand and Nav */
   .site-header__inner {
     flex-direction: column !important;
-    align-items: flex-start !important; /* Forces everything to the left */
-    gap: 1rem !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important; /* Tighten gap to keep it compact */
     padding: 1rem 0.7rem !important;
+    overflow: hidden; /* Prevent the header itself from growing vertically */
   }
 
-  /* 2. Ensure the Brand doesn't center itself */
-  .brand {
-    text-align: left;
-    margin: 0 !important;
-    padding-left: 0.5rem;
-  }
-
-  /* 3. Make ONLY the nav row scrollable underneath */
+  /* 2. Lock the Nav to Horizontal Only */
   .site-nav {
     width: 100%;
-    overflow-x: auto;
+    overflow-x: auto; /* Allow horizontal */
+    overflow-y: hidden; /* STRICTLY block vertical movement */
+    display: block; 
+    height: 40px; /* Fixed height stops vertical 'bounce' */
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    /* Add snapping behavior */
-    scroll-snap-type: x mandatory; 
+    scroll-snap-type: x proximity; /* Proximity feels less 'aggressive' than mandatory */
   }
 
-  /* 4. Hide scrollbar for Chrome/Safari */
   .site-nav::-webkit-scrollbar {
     display: none;
   }
 
-  /* 5. Force the list to stay in one horizontal line starting from the left */
+  /* 3. The List */
   .site-nav__list {
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important;
-    justify-content: flex-start !important;
-    gap: 1.8rem !important; /* Slightly larger gap makes snapping feel better */
+    align-items: center; /* Vertically center the text within the 40px height */
+    height: 100%; /* Match parent height */
+    gap: 1.5rem !important;
     margin: 0;
     padding: 0 0.5rem;
   }
 
   .site-nav__item {
-    flex: 0 0 auto; /* Keeps links from squishing */
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    height: 100%; /* Ensure item doesn't push vertical boundaries */
+    display: flex;
+    align-items: center;
   }
 
   .site-nav__link {
     white-space: nowrap;
     font-size: 0.9rem !important;
-    padding: 0.5rem 0;
-    display: block;
+    line-height: 1; /* Stops extra vertical spacing from fonts */
+    padding: 0; /* Remove vertical padding to stop 'wiggle' */
   }
 }
