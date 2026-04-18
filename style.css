@@ -1422,55 +1422,49 @@ body {
   color: #141210;
 }
 @media (max-width: 768px) {
-  /* 1. Stack Brand and Nav */
+  /* Forces the header to stack vertically and stay left */
   .site-header__inner {
     flex-direction: column !important;
     align-items: flex-start !important;
-    gap: 0.5rem !important; /* Tighten gap to keep it compact */
-    padding: 1rem 0.7rem !important;
-    overflow: hidden; /* Prevent the header itself from growing vertically */
+    padding: 1rem !important;
+    gap: 0.8rem !important;
   }
 
-  /* 2. Lock the Nav to Horizontal Only */
+  /* Keeps the Heritage Sourcing logo on the left */
+  .brand {
+    text-align: left !important;
+    margin: 0 !important;
+  }
+
+  /* The scrollable 'track' for the nav */
   .site-nav {
     width: 100%;
-    overflow-x: auto; /* Allow horizontal */
-    overflow-y: hidden; /* STRICTLY block vertical movement */
-    display: block; 
-    height: 40px; /* Fixed height stops vertical 'bounce' */
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: block;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    scroll-snap-type: x proximity; /* Proximity feels less 'aggressive' than mandatory */
   }
 
-  .site-nav::-webkit-scrollbar {
-    display: none;
-  }
+  .site-nav::-webkit-scrollbar { display: none; }
 
-  /* 3. The List */
+  /* This ensures 'Home' is visible and aligned with the logo above */
   .site-nav__list {
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important;
-    align-items: center; /* Vertically center the text within the 40px height */
-    height: 100%; /* Match parent height */
-    gap: 1.5rem !important;
+    justify-content: flex-start !important;
+    gap: 1.5rem !important; /* Space between links */
     margin: 0;
-    padding: 0 0.5rem;
+    padding: 0 0.2rem; /* Minor nudge to align with the Logo text */
   }
 
-  .site-nav__item {
-    flex: 0 0 auto;
-    scroll-snap-align: start;
-    height: 100%; /* Ensure item doesn't push vertical boundaries */
-    display: flex;
-    align-items: center;
-  }
+  .site-nav__item { flex: 0 0 auto; }
 
   .site-nav__link {
     white-space: nowrap;
     font-size: 0.9rem !important;
-    line-height: 1; /* Stops extra vertical spacing from fonts */
-    padding: 0; /* Remove vertical padding to stop 'wiggle' */
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
   }
 }
