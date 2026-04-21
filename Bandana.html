@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Collection of Scarfs and Bandanas | Heritage Sourcing</title>
+  <meta name="description" content="Explore our latest curated selection of visual inspiration and exclusive pieces." />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      overflow-x: hidden;
+      background: #fafafa;
+    }
+
+    /* HEADER */
+.hlb-header {
+  text-align: center;
+  padding: 2rem 1rem 1.5rem 1rem; /* Reduced padding to keep it tight */
+}
+
+.hlb-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem; /* Changed from 2.5rem */
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+.hlb-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem; /* Changed from 1rem */
+  color: #666;
+  letter-spacing: 0.05em;
+  text-transform: uppercase; /* Optional: adds a nice "premium" look to smaller text */
+}
+
+    /* TYPEWRITER BOX */
+    .typewriter-wrap {
+      max-width: 680px;
+      margin: 0 auto 2.5rem auto;
+      padding: 0 1.5rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.75;
+      text-align: center;
+    }
+
+    .typewriter-text::after {
+      content: '|';
+      animation: blink 0.75s step-end infinite;
+      color: #999;
+    }
+
+    .typewriter-text.done::after {
+      display: none;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    /* THE GRID — matches Atelier exactly */
+    .hlb-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      width: 100vw;
+      margin: 0;
+      padding: 0;
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .hlb-item {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 3 / 4;
+      background: #f0f0f0;
+      margin: 0;
+      border: none;
+      cursor: pointer;
+    }
+
+    .hlb-img-wrap {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .hlb-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transition: transform 0.9s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .hlb-item:hover .hlb-img {
+      transform: scale(1.08);
+    }
+
+    /* LIGHTBOX */
+    .lightbox-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.88);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox-overlay.active {
+      display: flex;
+    }
+
+    .lightbox-img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 2px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    }
+
+    .lightbox-close {
+      position: fixed;
+      top: 1.25rem;
+      right: 1.5rem;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+      line-height: 1;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+    }
+
+    .lightbox-close:hover { opacity: 1; }
+
+    /* MOBILE */
+    @media (max-width: 1024px) {
+      .hlb-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1px;
+        width: 100%;
+        left: 0;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body class="hlb-body">
+
+  <header class="site-header">
+    <div class="shell site-header__inner">
+      <a href="index.html" class="brand">
+        <span class="brand__overline">Heritage</span>
+        <span class="brand__main">Sourcing</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <ul class="site-nav__list">
+          <li class="site-nav__item"><a href="index.html" class="site-nav__link">Home</a></li>
+          <li class="site-nav__item"><a href="collection.html" class="site-nav__link">Collection</a></li>
+          <li class="site-nav__item"><a href="lookbook.html" class="site-nav__link">Atelier</a></li>
+          <li class="site-nav__item"><a href="Bandana.html" class="site-nav__link site-nav__link--active" aria-current="page">The Silent Loom</a></li>
+          <li class="site-nav__item"><a href="index.html#about" class="site-nav__link">About</a></li>
+          <li class="site-nav__item"><a href="index.html#contact" class="site-nav__link">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="hlb-header">
+    <div class="hlb-title">Collection of Scarfs and Bandanas</div>
+    <div class="hlb-subtitle">Visual highlights and sourced exclusivity</div>
+  </div>
+
+  <div class="typewriter-wrap">
+    <span class="typewriter-text" id="typewriter"></span>
+  </div>
+
+  <div class="hlb-grid">
+
+    <div class="hlb-item" onclick="openLightbox('SLIKE ZA STRANICU/BANDANA1.jpg')">
+      <div class="hlb-img-wrap">
+        <img class="hlb-img" src="SLIKE ZA STRANICU/BANDANA1.jpg" alt="Bandana 1">
+      </div>
+    </div>
+
+    <div class="hlb-item" onclick="openLightbox('SLIKE ZA STRANICU/BANDANA2.jpg')">
+      <div class="hlb-img-wrap">
+        <img class="hlb-img" src="SLIKE ZA STRANICU/BANDANA2.jpg" alt="Bandana 2">
+      </div>
+    </div>
+
+    <div class="hlb-item" onclick="openLightbox('SLIKE ZA STRANICU/BANDANA3.jpg')">
+      <div class="hlb-img-wrap">
+        <img class="hlb-img" src="SLIKE ZA STRANICU/BANDANA3.jpg" alt="Bandana 3">
+      </div>
+    </div>
+
+    <div class="hlb-item" onclick="openLightbox('SLIKE ZA STRANICU/BANDANA4.jpg')">
+      <div class="hlb-img-wrap">
+        <img class="hlb-img" src="SLIKE ZA STRANICU/BANDANA4.jpg" alt="Bandana 4">
+      </div>
+    </div>
+
+    <div class="hlb-item" onclick="openLightbox('SLIKE ZA STRANICU/BANDANA5.jpg')">
+      <div class="hlb-img-wrap">
+        <img class="hlb-img" src="SLIKE ZA STRANICU/BANDANA5.jpg" alt="Bandana 5">
+      </div>
+    </div>
+
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox-overlay" id="lightbox" onclick="closeLightbox(event)">
+    <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+    <img class="lightbox-img" id="lightbox-img" src="" alt="">
+  </div>
+
+  <footer class="site-footer" style="padding: 3rem 0; background: #fff; margin-top: 0;">
+    <div class="shell site-footer__inner" style="text-align: center; font-family: 'Inter', sans-serif;">
+      <p class="site-footer__copyright" style="font-size: 0.85rem; color: #999; letter-spacing: 0.05em;">
+        &copy; 2024 Heritage Sourcing. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // TYPEWRITER
+    var typewriterText = "Each piece in this collection tells a story woven through time — hand-selected bandanas and scarfs sourced from heritage ateliers across the world. From sun-bleached desert prints to dense botanical silks, every fold carries the mark of its origin. These are not just accessories; they are fragments of craft traditions passed down through generations, now finding new life in the hands of those who value the quietly extraordinary.";
+
+    var el = document.getElementById('typewriter');
+    var i = 0;
+    var speed = 22;
+
+    function type() {
+      if (i < typewriterText.length) {
+        el.textContent += typewriterText.charAt(i);
+        i++;
+        setTimeout(type, speed);
+      } else {
+        el.classList.add('done');
+      }
+    }
+
+    window.addEventListener('load', function() {
+      setTimeout(type, 400);
+    });
+
+    // LIGHTBOX
+    function openLightbox(src) {
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox(e) {
+      if (!e || e.target === document.getElementById('lightbox') || e.target.classList.contains('lightbox-close')) {
+        document.getElementById('lightbox').classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    // PARALLAX
+    function applyParallax() {
+      if (window.innerWidth > 1024) {
+        document.querySelectorAll('.hlb-img-wrap').forEach(function(el) {
+          var rect = el.getBoundingClientRect();
+          var windowHeight = window.innerHeight;
+          if (rect.top < windowHeight && rect.bottom > 0) {
+            var offset = (rect.top + rect.height / 2 - windowHeight / 2) / windowHeight;
+            el.querySelector('.hlb-img').style.transform = 'scale(1.1) translateY(' + (offset * 30) + 'px)';
+          }
+        });
+      } else {
+        document.querySelectorAll('.hlb-img').forEach(function(img) {
+          img.style.transform = 'none';
+        });
+      }
+    }
+
+    document.addEventListener('scroll', applyParallax, { passive: true });
+    window.addEventListener('load', applyParallax);
+    window.addEventListener('resize', applyParallax);
+  </script>
+</body>
+</html>
