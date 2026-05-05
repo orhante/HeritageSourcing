@@ -225,16 +225,25 @@
 
   </div>
 
-  <!-- LIGHTBOX -->
-  <div class="lightbox-overlay" id="lightbox" onclick="closeLightbox(event)">
-    <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+ <!-- LIGHTBOX WITH ORDERING -->
+<div class="lightbox-overlay" id="lightbox" onclick="closeLightbox(event)">
+  <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+  
+  <div style="display: flex; flex-direction: column; align-items: center;">
     <img class="lightbox-img" id="lightbox-img" src="" alt="">
+    
+    <div class="lightbox-details">
+      <span class="product-name-display" id="lightbox-product-name">Product Name</span>
+      <!-- Option: WhatsApp Order -->
+      <a href="#" id="order-link" target="_blank" class="order-btn">Secure this piece — 40 BAM</a>
+    </div>
   </div>
+</div>
 
   <footer class="site-footer" style="padding: 3rem 0; background: #fff; margin-top: 0;">
     <div class="shell site-footer__inner" style="text-align: center; font-family: 'Inter', sans-serif;">
       <p class="site-footer__copyright" style="font-size: 0.85rem; color: #999; letter-spacing: 0.05em;">
-        &copy; 2024 Heritage Sourcing. All rights reserved.
+        &copy; 2026 Heritage Sourcing. All rights reserved.
       </p>
     </div>
   </footer>
@@ -261,12 +270,18 @@
       setTimeout(type, 400);
     });
 
-    // LIGHTBOX
-    function openLightbox(src) {
-      document.getElementById('lightbox-img').src = src;
-      document.getElementById('lightbox').classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
+    function openLightbox(src, itemName) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox-product-name').textContent = itemName;
+  
+  // Format WhatsApp Link 
+  var phoneNumber = "38763368323"; 
+  var message = encodeURIComponent("Hello Heritage Sourcing! I would like to order: " + itemName);
+  document.getElementById('order-link').href = "https://wa.me/" + phoneNumber + "?text=" + message;
+
+  document.getElementById('lightbox').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
 
     function closeLightbox(e) {
       if (!e || e.target === document.getElementById('lightbox') || e.target.classList.contains('lightbox-close')) {
