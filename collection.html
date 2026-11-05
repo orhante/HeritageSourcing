@@ -732,17 +732,21 @@
       <img id="lightbox-img" style="max-width:90vw; max-height:90vh; object-fit:contain;" />
     </div>
 
+    <style>#in-stock .product-card__image { cursor: zoom-in; }</style>
     <script>
-      // ── LIGHTBOX ──
-      document.querySelectorAll('#in-stock .product-card__image').forEach(function(img) {
-        img.style.cursor = 'zoom-in';
-        img.addEventListener('click', function(e) {
-          e.preventDefault();
-          document.getElementById('lightbox-img').src = this.src;
-          document.getElementById('lightbox').style.display = 'flex';
-        });
+      // ── LIGHTBOX (also works for products loaded from the database) ──
+      document.getElementById('in-stock').addEventListener('click', function(e) {
+        var img = e.target.closest('.product-card__image');
+        if (!img) return;
+        e.preventDefault();
+        document.getElementById('lightbox-img').src = img.src;
+        document.getElementById('lightbox').style.display = 'flex';
       });
     </script>
+
+    <!-- Database connection -->
+    <script src="js/heritage-api.js"></script>
+    <script src="js/collection-live.js"></script>
 
   </body>
 </html>

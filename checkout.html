@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script src="js/heritage-api.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -483,13 +484,40 @@
       return new URLSearchParams(window.location.search).get(n) || '';
     }
 
-    var product = getParam('product');
-    var size    = getParam('size');
-    var price   = getParam('price');
+    var productId = getParam('id');        // set when the product comes from the database
+    var product   = getParam('product');   // old-style links still work
+    var size      = getParam('size');
+    var price     = getParam('price');
+    var orderId   = null;
 
-    document.getElementById('sum-name').textContent  = product || 'Unknown item';
-    document.getElementById('sum-size').textContent  = size    || '—';
-    document.getElementById('sum-price').textContent = price   || '—';
+    function showSummary() {
+      document.getElementById('sum-name').textContent  = product || 'Unknown item';
+      document.getElementById('sum-size').textContent  = size    || '—';
+      document.getElementById('sum-price').textContent = price   || '—';
+    }
+
+    function markUnavailable() {
+      var btn = document.getElementById('btn-place');
+      btn.disabled = true;
+      btn.textContent = 'This piece is no longer available';
+    }
+
+    showSummary();
+
+    // Load the real product name, size and price from the database
+    if (productId && window.HERITAGE_API) {
+      heritageFetch('/products/' + encodeURIComponent(productId))
+        .then(function(r) {
+          if (!r.ok) { product = 'This piece is no longer listed'; showSummary(); markUnavailable(); return; }
+          var p = r.body;
+          product = p.name + (p.variant ? ' (' + p.variant + ')' : '');
+          size    = p.size || '';
+          price   = p.price_km + 'KM';
+          showSummary();
+          if (p.status !== 'available') markUnavailable();
+        })
+        .catch(function() { /* keep what the link says */ });
+    }
 
     function selectPay(val) {
       ['cod','paypal','card'].forEach(function(id) {
@@ -526,8 +554,42 @@
       btn.disabled = true;
       btn.textContent = 'Processing...';
 
+      // Save the order in the database first (skipped while the backend is not online)
+      if (productId && window.HERITAGE_API) {
+        heritageFetch('/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            productId: Number(productId),
+            fullName: name, phone: phone, email: email,
+            street: address, city: city, postalCode: zip, country: country,
+            paymentMethod: method
+          })
+        })
+          .then(function(r) {
+            if (r.status === 404 || r.status === 409) {
+              alert('Sorry — this piece has just been reserved by someone else.');
+              markUnavailable();
+              return;
+            }
+            if (r.status === 400) {
+              alert(r.body.fields ? 'Please check: ' + r.body.fields.join(', ') : (r.body.error || 'Please check your details.'));
+              btn.disabled = false;
+              btn.textContent = 'Confirm order';
+              return;
+            }
+            if (r.ok) orderId = r.body.orderId;
+            sendOrder(method, name, phone, email, address, city, zip, country);
+          })
+          .catch(function() { sendOrder(method, name, phone, email, address, city, zip, country); });
+      } else {
+        sendOrder(method, name, phone, email, address, city, zip, country);
+      }
+    }
+
+    function sendOrder(method, name, phone, email, address, city, zip, country) {
       var waMsg = encodeURIComponent(
-        'New order — Heritage Sourcing\n\n' +
+        'New order' + (orderId ? ' #' + orderId : '') + ' — Heritage Sourcing\n\n' +
         'Product: ' + product + '\nSize: ' + size + '\nPrice: ' + price + '\n\n' +
         'Customer: ' + name + '\nPhone: ' + phone +
         (email ? '\nEmail: ' + email : '') +
@@ -537,6 +599,7 @@
       var waUrl = 'https://wa.me/' + WA_NUMBER + '?text=' + waMsg;
 
       var emailParams = {
+        order_id: orderId ? '#' + orderId : '—',
         product: product,
         size: size,
         price: price,
@@ -575,6 +638,9 @@
       if (!_pendingBtn || !_pendingEmailParams) return;
       _pendingBtn.disabled = true;
       _pendingBtn.textContent = 'Confirming...';
+      if (orderId) {
+        heritageFetch('/orders/' + orderId + '/paid', { method: 'POST' }).catch(function() {});
+      }
       emailjs.send('service_ks90jyq', 'template_obynd5c', _pendingEmailParams)
         .then(function()  { _pendingBtn.textContent = '✓ Order confirmed — we\'ll ship within 24h'; })
         .catch(function() { _pendingBtn.textContent = '✓ Order confirmed — we\'ll ship within 24h'; });
